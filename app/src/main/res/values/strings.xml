@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">MatchMakers</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="register">Register</string>
+    <string name="CreateAnAccount">Create an Account</string>
+    <string name="loginRedirect">Existing User Login</string>
+    <string name="name_input">Input your name</string>
+    <string name="interest_input">Enter an interest</string>
+    <string name="submit">Submit</string>
+</resources>

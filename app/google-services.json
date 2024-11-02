@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "408256072995",
+    "project_id": "matchmakers-f3d4f",
+    "storage_bucket": "matchmakers-f3d4f.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408256072995:android:b99cfe4e1b9cc004e85096",
+        "android_client_info": {
+          "package_name": "com.example.matchmakers"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCm3TejG40WNlNGM_0TAwegZlF_WR6afUI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
