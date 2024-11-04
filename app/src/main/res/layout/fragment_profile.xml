@@ -67,6 +67,12 @@
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"
             android:minLines="3"/>
+
+        <Button
+            android:id="@+id/logout_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Log out"/>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

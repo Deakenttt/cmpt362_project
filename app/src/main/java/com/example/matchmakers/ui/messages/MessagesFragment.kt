@@ -7,13 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.matchmakers.R
 import com.example.matchmakers.databinding.FragmentMessagesBinding
 import com.example.matchmakers.model.User
-import com.example.matchmakers.ui.notifications.NotificationsViewModel
 
 class MessagesFragment: Fragment() {
     private var usersArray = ArrayList<User>()
@@ -52,11 +50,15 @@ class MessagesFragment: Fragment() {
         adapter = MessagesAdapter(context, usersArray)
         messagesList.adapter = adapter
 
+        // Change this later to get the actual current user from the database
+        val currentUserId = "0"
+
         messagesList.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _: Long ->
             println(usersArray[position].name)
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(ChatActivity.USER_ID_KEY, usersArray[position].id)
             intent.putExtra(ChatActivity.USER_NAME_KEY, usersArray[position].name)
+            intent.putExtra(ChatActivity.CURRENT_USER_ID_KEY, currentUserId)
             startActivity(intent)
         }
 

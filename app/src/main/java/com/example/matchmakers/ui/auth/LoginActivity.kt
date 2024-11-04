@@ -2,7 +2,8 @@ package com.example.matchmakers.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -20,6 +21,10 @@ class LoginActivity : AppCompatActivity() {
 
     private val loginViewModel: LoginViewModel by viewModels()
 
+    private lateinit var sharedPref: SharedPreferences
+    private var email = ""
+    private var password = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -32,6 +37,9 @@ class LoginActivity : AppCompatActivity() {
         // Observe login result
         loginViewModel.loginResult.observe(this) { success ->
             if (success) {
+                // If the login was successful, save the login credentials so the user doesn't have to enter them again
+                // They can log out from the profile fragment
+                storeLogin(email, password)
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             }
@@ -45,8 +53,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         loginButton.setOnClickListener {
-            val email: String = emailEditText.text.toString()
-            val password: String = passwordEditText.text.toString()
+            email = emailEditText.text.toString()
+            password = passwordEditText.text.toString()
             loginViewModel.login(email, password)
         }
 
@@ -54,6 +62,40 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
 
-        loginViewModel.login("bull@bull.com", "123456")
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+
+        // When the app starts, check for a saved login and if it exists, automatically login with it
+        loadLogin()
+    }
+
+    private fun storeLogin(email: String, password: String){
+        if (email == "" || password == ""){
+            return
+        }
+
+        with (sharedPref.edit()){
+            clear()
+            putString(EMAIL_KEY, email)
+            putString(PASSWORD_KEY, password)
+            apply()
+        }
+    }
+
+    private fun loadLogin(){
+        if (!(sharedPref.contains(EMAIL_KEY) && sharedPref.contains(PASSWORD_KEY))){
+            return
+        }
+
+        val email = sharedPref.getString(EMAIL_KEY, "")
+        val password = sharedPref.getString(PASSWORD_KEY, "")
+
+        if (email != null && password != null){
+            loginViewModel.login(email, password)
+        }
+    }
+
+    companion object{
+        const val EMAIL_KEY = "email"
+        const val PASSWORD_KEY = "password"
     }
 }
