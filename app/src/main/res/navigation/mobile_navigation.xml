@@ -24,6 +24,12 @@
         tools:layout="@layout/fragment_notifications" />
 
     <fragment
+        android:id="@+id/navigation_messages"
+        android:name="com.example.matchmakers.ui.messages.MessagesFragment"
+        android:label="@string/title_messages"
+        tools:layout="@layout/fragment_messages" />
+
+    <fragment
         android:id="@+id/navigation_profile"
         android:name="com.example.matchmakers.ui.profile.ProfileFragment"
         android:label="@string/title_profile"

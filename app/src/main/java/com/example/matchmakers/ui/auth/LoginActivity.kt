@@ -53,5 +53,7 @@ class LoginActivity : AppCompatActivity() {
         registerRedirectButton.setOnClickListener {
             startActivity(Intent(this, RegisterActivity::class.java))
         }
+
+        loginViewModel.login("bull@bull.com", "123456")
     }
 }
