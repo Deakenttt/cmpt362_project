@@ -54,10 +54,28 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+//    Firebase BoM ensures you always get the compatible versions
     implementation(platform("com.google.firebase:firebase-bom:33.5.1"))
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-firestore")
     implementation("com.google.firebase:firebase-auth")
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+
+    // Room components
+    val room_version = "2.6.0"
+    implementation("androidx.room:room-ktx:$room_version") // Room database with Kotlin extensions
+    kapt("androidx.room:room-compiler:$room_version") // Annotation processor for Room (generates database code)
+
+    // Lifecycle components
+    val lifecycle_version = "2.6.2"
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:$lifecycle_version") // LiveData for reactive UI updates
+
+    // JSON parsing
+    implementation("com.google.code.gson:gson:2.8.8") // JSON serialization/deserialization with Gson
+    // HTTP client
+    implementation("com.squareup.okhttp3:okhttp:4.9.2") // HTTP client for network requests
+
 }
+// Apply Google Services plugin at the bottom (required for Firebase)
+apply(plugin = "com.google.gms.google-services")

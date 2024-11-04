@@ -1,6 +1,5 @@
-package com.example.i_am_here_map_kotlin.network
+package com.example.matchmakers.network
 
-import com.example.matchmakers.network.ClusterApiService
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 

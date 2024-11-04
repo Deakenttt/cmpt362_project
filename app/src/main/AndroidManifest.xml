@@ -15,6 +15,28 @@
         android:theme="@style/Theme.MatchMakers"
         tools:targetApi="31">
         <activity
+            android:name=".viewmodel.ViewModelFactory"
+            android:exported="false" />
+        <activity
+            android:name=".viewmodel.UserViewModel"
+            android:exported="false" />
+        <activity
+            android:name=".repository.UserRepository"
+            android:exported="false" />
+        <activity
+            android:name=".database.UserDatabase"
+            android:exported="false" />
+        <activity
+            android:name=".database.UserDao"
+            android:exported="false" />
+        <activity
+            android:name=".model.User"
+            android:exported="false"
+            android:theme="@style/Theme.MatchMakers" />
+        <activity
+            android:name=".database.User"
+            android:exported="false" />
+        <activity
             android:name=".network.RetrofitInstance"
             android:exported="false" />
         <activity

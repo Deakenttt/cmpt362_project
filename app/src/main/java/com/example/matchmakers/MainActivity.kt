@@ -8,7 +8,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.i_am_here_map_kotlin.network.RetrofitInstance
+import com.example.matchmakers.network.RetrofitInstance
 import com.example.matchmakers.databinding.ActivityMainBinding
 import com.google.firebase.auth.auth
 import com.google.firebase.firestore.firestore
