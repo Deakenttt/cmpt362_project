@@ -2,6 +2,7 @@ package com.example.matchmakers
 
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -33,6 +34,9 @@ class  MainActivity : AppCompatActivity() {
 
         val navView: BottomNavigationView = binding.navView
 
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
@@ -60,5 +64,4 @@ class  MainActivity : AppCompatActivity() {
             }
         })
     }
-
 }
