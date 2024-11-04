@@ -11,9 +11,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.matchmakers.network.RetrofitInstance
 import com.example.matchmakers.databinding.ActivityMainBinding
-import com.google.firebase.auth.auth
-import com.google.firebase.firestore.firestore
-import com.google.firebase.Firebase
+import com.example.matchmakers.maplogic.LocationPermissionHelper
+import com.example.matchmakers.maplogic.LocationService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,6 +24,13 @@ class  MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Check and request location permission if not granted
+        if(!LocationPermissionHelper.isLocationPermissionGranted(this)) {
+            LocationPermissionHelper.requestLocationPermission(this)
+
+        } else {
+            LocationService(this).getLocation()
+        }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -47,7 +53,10 @@ class  MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
     }
+
+
 
     private fun updateClusters() {
         RetrofitInstance.api.updateClusters().enqueue(object : Callback<Void> {

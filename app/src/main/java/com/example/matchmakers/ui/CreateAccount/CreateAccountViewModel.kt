@@ -14,13 +14,19 @@ class CreateAccountViewModel : ViewModel() {
     private val _accountCreated = MutableLiveData<Boolean>()
     val accountCreated: LiveData<Boolean> = _accountCreated
 
-    fun createAccount(name: String, interest: String) {
+    fun createAccount(name: String, age: Int, interest: String, gender: String) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val uid = currentUser.uid
             val userInfo = hashMapOf(
                 "name" to name,
-                "interest" to interest
+                "age" to age,
+                "interest" to interest,
+                "gender" to gender,
+                "latitude" to 0.0,
+                "longitude" to 0.0,
+                "cluster" to 0,
+                "recommended" to emptyList<Int>()
             )
 
             db.collection("users").document(uid)

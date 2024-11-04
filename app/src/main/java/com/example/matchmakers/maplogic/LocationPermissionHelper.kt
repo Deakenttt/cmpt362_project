@@ -1,4 +1,4 @@
-package com.example.matchmakers.mapslogic
+package com.example.matchmakers.maplogic
 
 import android.Manifest
 import android.app.Activity

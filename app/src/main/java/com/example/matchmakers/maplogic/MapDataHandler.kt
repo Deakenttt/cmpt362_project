@@ -1,4 +1,4 @@
-package com.example.matchmakers.mapslogic
+package com.example.matchmakers.maplogic
 
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions

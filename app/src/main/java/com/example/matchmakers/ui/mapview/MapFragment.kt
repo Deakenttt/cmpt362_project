@@ -1,6 +1,5 @@
 package com.example.matchmakers.ui.mapview
 
-import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +7,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matchmakers.R
-import com.example.matchmakers.mapslogic.LocationPermissionHelper
-import com.example.matchmakers.mapslogic.LocationService
-import com.example.matchmakers.mapslogic.MapDataHandler
+import com.example.matchmakers.maplogic.LocationPermissionHelper
+import com.example.matchmakers.maplogic.LocationService
+import com.example.matchmakers.maplogic.MapDataHandler
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -56,5 +55,5 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             LocationPermissionHelper.requestLocationPermission(requireActivity())
         }
     }
-}
+ }
 
