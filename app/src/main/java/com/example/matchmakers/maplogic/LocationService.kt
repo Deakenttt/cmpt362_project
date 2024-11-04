@@ -33,8 +33,13 @@ class LocationService(private val context: Context) {
     fun getLocation() {
         val locationTask: Task<Location> = fusedLocationClient.lastLocation
         locationTask.addOnSuccessListener { location ->
+            if (location == null){
+                println("location was null")
+                return@addOnSuccessListener
+            }
             val latitude = location.latitude
             val longitude = location.longitude
+            println("location was $latitude, $longitude")
             saveLocationToFirestore(latitude, longitude)
         }
         locationTask.addOnFailureListener {
