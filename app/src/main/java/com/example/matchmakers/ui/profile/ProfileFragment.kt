@@ -18,10 +18,13 @@ import com.example.matchmakers.ui.auth.LoginActivity
 class ProfileFragment: Fragment() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var logoutButton: Button
+    private lateinit var editAvatarButton: Button
 
     private var interestsArray = ArrayList<String>()
     private lateinit var interestsList: GridView
     private lateinit var adapter: InterestsAdapter
+
+    private lateinit var editDialog: EditAvatarDialog
 
     private var _binding: FragmentProfileBinding? = null
 
@@ -43,8 +46,11 @@ class ProfileFragment: Fragment() {
         val context = requireActivity()
 
         sharedPref = PreferenceManager.getDefaultSharedPreferences(context)
+        editDialog = EditAvatarDialog()
 
         logoutButton = root.findViewById(R.id.logout_button)
+        editAvatarButton = root.findViewById(R.id.edit_avatar)
+
         logoutButton.setOnClickListener{
             with (sharedPref.edit()){
                 clear()
@@ -54,6 +60,12 @@ class ProfileFragment: Fragment() {
             }
             startActivity(Intent(context, LoginActivity::class.java))
             context.finish()
+        }
+        editAvatarButton.setOnClickListener{
+            val bundle = Bundle()
+            bundle.putString(EditAvatarDialog.DIALOG_NAME, "Choose Photo")
+            editDialog.arguments = bundle
+            editDialog.show(context.supportFragmentManager, "")
         }
 
         interestsArray = arrayListOf("Interest 1", "Interest 2", "Interest 3", "Interest 4", "Interest 5")
