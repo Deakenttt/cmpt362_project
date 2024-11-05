@@ -1,12 +1,15 @@
 package com.example.matchmakers.ui.messages
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.example.matchmakers.R
 import com.example.matchmakers.model.ChatMessage
+import com.example.matchmakers.ui.profile.OtherProfileActivity
 
 class ChatActivity: AppCompatActivity() {
     private var currentUserId = ""
@@ -25,16 +28,24 @@ class ChatActivity: AppCompatActivity() {
         setContentView(R.layout.activity_chat)
 
         val intentCurrentUser = intent.getStringExtra(CURRENT_USER_ID_KEY)
+        val intentUserId = intent.getStringExtra(USER_ID_KEY)
+        val intentUserName = intent.getStringExtra(USER_NAME_KEY)
         if (intentCurrentUser != null){
             currentUserId = intentCurrentUser
         }
-        val intentUserId = intent.getStringExtra(USER_ID_KEY)
         if (intentUserId != null){
             userId = intentUserId
         }
-        val intentUserName = intent.getStringExtra(USER_NAME_KEY)
         if (intentUserName != null){
             userName = intentUserName
+        }
+
+        val toolbar: Toolbar = findViewById(R.id.toolbar)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+        toolbar.setNavigationOnClickListener{
+            finish()
         }
 
         usernameText = findViewById(R.id.chat_username)
@@ -42,7 +53,10 @@ class ChatActivity: AppCompatActivity() {
 
         viewProfileButton = findViewById(R.id.chat_view_profile)
         viewProfileButton.setOnClickListener{
-            // Profile activity is started here
+            val intent = Intent(this, OtherProfileActivity::class.java)
+            intent.putExtra(OtherProfileActivity.USER_ID_KEY, userId)
+            intent.putExtra(OtherProfileActivity.USER_NAME_KEY, userName)
+            startActivity(intent)
         }
 
         // Change this later to get the actual chat with the user from the database
