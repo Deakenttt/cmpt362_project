@@ -14,8 +14,19 @@
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.matchmakers.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:label="Dashboard"
+        tools:layout="@layout/fragment_dashboard">
+        <!-- 这个操作将用于导航至 MatchFragment -->
+        <action
+            android:id="@+id/action_dashboardFragment_to_matchFragment"
+            app:destination="@id/matchFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/matchFragment"
+        android:name="com.example.matchmakers.match.MatchFragment"
+        android:label="Match"
+        tools:layout="@layout/fragment_match" />
 
     <fragment
         android:id="@+id/navigation_notifications"

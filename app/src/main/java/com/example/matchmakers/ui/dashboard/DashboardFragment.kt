@@ -1,50 +1,125 @@
 package com.example.matchmakers.ui.dashboard
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Button
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.matchmakers.databinding.FragmentDashboardBinding
+import androidx.fragment.app.FragmentTransaction
+import androidx.navigation.fragment.findNavController
+import com.example.matchmakers.R
+import com.example.matchmakers.maplogic.LocationPermissionHelper
+import com.example.matchmakers.match.MatchFragment
+import com.example.matchmakers.ui.mapbview.MapsActivity
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(), OnMapReadyCallback {
 
-    private var _binding: FragmentDashboardBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
-    private val binding get() = _binding!!
+    private lateinit var googleMap: GoogleMap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+        inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+    ): View? {
+        val view = inflater.inflate(R.layout.fragment_dashboard, container, false)
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        // Initialize FusedLocationProviderClient
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
 
-//        val textView: TextView = binding.textDashboard
-//        dashboardViewModel.text.observe(viewLifecycleOwner) {
-//            textView.text = it
-//        }
-//
-//        dashboardViewModel.name.observe(viewLifecycleOwner) { name ->
-//            binding.name.text = name
-//        }
-//
-//        dashboardViewModel.interest.observe(viewLifecycleOwner) { interest ->
-//            binding.interests.text = interest
-//        }
-        return root
+        // Initialize SupportMapFragment
+        val mapFragment = childFragmentManager.findFragmentById(R.id.dashboard_map_container) as? SupportMapFragment
+            ?: SupportMapFragment.newInstance().also {
+                childFragmentManager.beginTransaction().replace(R.id.dashboard_map_container, it).commit()
+            }
+        mapFragment.getMapAsync(this)
+
+        // Set up button click listener for Map button
+        val mapButton = view.findViewById<Button>(R.id.map_button)
+        mapButton.setOnClickListener {
+            Log.d("MapsActivity", "Map button clicked, starting MapsActivity")
+            val intent = Intent(requireContext(), MapsActivity::class.java)
+            startActivity(intent)
+        }
+
+
+        // Set up button click listener for Match button
+        val matchButton = view.findViewById<Button>(R.id.match_button)
+        matchButton.setOnClickListener {
+            findNavController().navigate(R.id.action_dashboardFragment_to_matchFragment)
+
+        }
+
+        return view
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
+        if (LocationPermissionHelper.isLocationPermissionGranted(requireContext())) {
+            enableUserLocation()
+        } else {
+            LocationPermissionHelper.requestLocationPermission(requireActivity())
+        }
+    }
+
+
+    private fun enableUserLocation() {
+        googleMap.isMyLocationEnabled = true
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener { location: Location? ->
+            location?.let {
+                val userLocation = LatLng(it.latitude, it.longitude)
+                googleMap.addMarker(MarkerOptions().position(userLocation).title("Your Location"))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+            } ?: Toast.makeText(requireContext(), "Unable to fetch location", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == LocationPermissionHelper.LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                enableUserLocation()
+            } else {
+                Toast.makeText(requireContext(), "Location permission denied", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }
+
+
+
+

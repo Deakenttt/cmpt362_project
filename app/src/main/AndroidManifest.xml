@@ -35,10 +35,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="YOUR_API_KEY" />
 
-        <activity
-            android:name=".ui.mapview.MapsActivity"
-            android:exported="false"
-            android:label="@string/title_activity_maps" />
+        <activity android:name=".ui.mapbview.MapsActivity" />
+
         <activity
             android:name=".viewmodel.ViewModelFactory"
             android:exported="false" />
@@ -94,7 +92,6 @@
         <activity
             android:name=".ui.report.ReportActivity"
             android:exported="false" />
-
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.matchmakers"
@@ -103,6 +100,10 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths"/>
+            <!-- Google Maps API Key -->
+            <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="AIzaSyC8vSUHnTEVx4frBLolHJyZ8_nx3IyB97E" />
         </provider>
     </application>
 
