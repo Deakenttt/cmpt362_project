@@ -1,4 +1,4 @@
-package com.example.matchmakers.ui.mapbview
+package com.example.matchmakers.ui.mapview
 
 import androidx.lifecycle.ViewModel
 

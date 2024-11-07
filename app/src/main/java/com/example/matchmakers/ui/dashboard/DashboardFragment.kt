@@ -13,12 +13,10 @@ import android.widget.Button
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.navigation.fragment.findNavController
 import com.example.matchmakers.R
 import com.example.matchmakers.maplogic.LocationPermissionHelper
-import com.example.matchmakers.match.MatchFragment
-import com.example.matchmakers.ui.mapbview.MapsActivity
+import com.example.matchmakers.ui.mapview.MapActivity
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -52,8 +50,8 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
         // Set up button click listener for Map button
         val mapButton = view.findViewById<Button>(R.id.map_button)
         mapButton.setOnClickListener {
-            Log.d("MapsActivity", "Map button clicked, starting MapsActivity")
-            val intent = Intent(requireContext(), MapsActivity::class.java)
+            Log.d("MapActivity", "Map button clicked, starting MapActivity")
+            val intent = Intent(requireContext(), MapActivity::class.java)
             startActivity(intent)
         }
 

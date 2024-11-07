@@ -1,4 +1,4 @@
-package com.example.matchmakers.ui.mapbview
+package com.example.matchmakers.ui.mapview
 
 import android.os.Bundle
 import android.widget.Button
@@ -14,7 +14,7 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.firestore.FirebaseFirestore
 
-class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var googleMap: GoogleMap
     private lateinit var locationService: LocationService

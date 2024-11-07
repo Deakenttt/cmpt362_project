@@ -1,4 +1,4 @@
-package com.example.matchmakers.ui.mapbview
+package com.example.matchmakers.ui.mapview
 
 import android.os.Bundle
 import android.view.LayoutInflater

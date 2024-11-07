@@ -35,7 +35,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="YOUR_API_KEY" />
 
-        <activity android:name=".ui.mapbview.MapsActivity" />
+        <activity android:name=".ui.mapview.MapActivity" />
 
         <activity
             android:name=".viewmodel.ViewModelFactory"
