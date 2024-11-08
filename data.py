@@ -31,13 +31,17 @@ def fetch_user_data():
 
     data["gender"] = data["gender"].map({"M": 0, "F": 1})
 
-    data["interest"] = data["interest"].str.lower()
-    data["interest"] = data["interest"].map({"Snowboarding": 1, "swimming": 2, "drinking": 3, "poker": 4 })
+    data["interest"] = data["interest"].str.lower().map({"snowboarding": 1, "swimming": 2, "drinking": 3, "poker": 4})
+
 
     # Filter data to include only rows where "interest" is mapped correctly
     data = data[data["interest"].notna()]
 
     dataset = data[["id", "gender", "interest", "name"]]
+
+    # Adjust pandas settings to display all rows
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_columns', None)
 
     # Print the extracted data to verify successful retrieval
     print("Extracted Data from Firebase:")
