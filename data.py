@@ -30,7 +30,12 @@ def fetch_user_data():
     # return data[["age", "gender", "hair_color", "outdoorsy", "relationship"]]
 
     data["gender"] = data["gender"].map({"M": 0, "F": 1})
+
+    data["interest"] = data["interest"].str.lower()
     data["interest"] = data["interest"].map({"Snowboarding": 1, "swimming": 2, "drinking": 3, "poker": 4 })
+
+    # Filter data to include only rows where "interest" is mapped correctly
+    data = data[data["interest"].notna()]
 
     dataset = data[["id", "gender", "interest", "name"]]
 
@@ -42,4 +47,4 @@ def fetch_user_data():
     return dataset
 
 # test the function to fetch and print data
-fetch_user_data()
+# fetch_user_data()
