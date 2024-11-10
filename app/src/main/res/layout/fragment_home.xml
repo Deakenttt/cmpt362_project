@@ -1,68 +1,167 @@
-<?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.home.HomeFragment">
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="16dp">
 
-        <!--
-        This is an example of one post preview. Move this to a ListView when
-        the exact details of what needs to be in the preview are decided
-        -->
-        <LinearLayout
+        <!-- Card 1 -->
+        <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
+            android:layout_marginBottom="16dp"
+            android:cardCornerRadius="8dp"
+            android:elevation="4dp">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:background="#454545"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:text="Example post preview text"/>
-
-            <RelativeLayout
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/user_image_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sample_user_image" />
 
                 <TextView
-                    android:id="@+id/post_username"
+                    android:id="@+id/user_name_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
-                    android:text="Username"/>
+                    android:text="User Name 1"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:paddingTop="8dp" />
 
                 <TextView
+                    android:id="@+id/user_age_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#808080"
-                    android:paddingHorizontal="8dp"
-                    android:layout_toEndOf="@id/post_username"
-                    android:text="Age"/>
+                    android:text="Age: 25"
+                    android:paddingTop="4dp" />
 
-                <Button
+                <TextView
+                    android:id="@+id/user_interest_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingVertical="0dp"
-                    android:minHeight="0dp"
-                    android:minWidth="0dp"
-                    android:textSize="12sp"
-                    android:text="Report"
-                    android:layout_alignParentEnd="true"/>
-            </RelativeLayout>
-        </LinearLayout>
+                    android:text="Interests: Hiking, Traveling"
+                    android:paddingTop="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp">
+
+                    <Button
+                        android:id="@+id/like_button_1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Like" />
+
+                    <Button
+                        android:id="@+id/dislike_button_1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dislike" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card 2 -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:cardCornerRadius="8dp"
+            android:elevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <ImageView
+                    android:id="@+id/user_image_2"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/sample_user_image" />
+
+                <TextView
+                    android:id="@+id/user_name_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="User Name 2"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:paddingTop="8dp" />
+
+                <TextView
+                    android:id="@+id/user_age_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Age: 27"
+                    android:paddingTop="4dp" />
+
+                <TextView
+                    android:id="@+id/user_interest_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Interests: Music, Art"
+                    android:paddingTop="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp">
+
+                    <Button
+                        android:id="@+id/like_button_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Like" />
+
+                    <Button
+                        android:id="@+id/dislike_button_2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dislike" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!-- Card 3 -->
+        <!-- Repeat similar structure for Cards 3, 4, 5, and 6 with unique IDs (user_image_3, user_name_3, etc.) -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:cardCornerRadius="8dp"
+            android:elevation="4dp">
+            <!-- Card structure with IDs user_image_3, user_name_3, etc. -->
+        </androidx.cardview.widget.CardView>
+
+        <!-- Repeat for Card 4 -->
+
+        <!-- Card 5 -->
+
+        <!-- Card 6 -->
+
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+</ScrollView>

@@ -1,4 +1,4 @@
-package com.example.matchmakers.ui.CreateAccount
+package com.example.matchmakers.ui.createaccount
 
 import android.content.Intent
 import android.os.Bundle

@@ -61,4 +61,5 @@
     <string name="gender_female">Female</string>
     <string name="gender_other">Other</string>
     <string name="age_input">Age</string>
+    <string name="no_more_recommended_users">no_more_recommended_users</string>
 </resources>

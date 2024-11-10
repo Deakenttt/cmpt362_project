@@ -2,13 +2,12 @@ package com.example.matchmakers.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.TextUtils
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.matchmakers.R
-import com.example.matchmakers.ui.CreateAccount.CreateAccount
+import com.example.matchmakers.ui.createaccount.CreateAccount
 import com.google.android.material.textfield.TextInputEditText
 
 class RegisterActivity : AppCompatActivity() {

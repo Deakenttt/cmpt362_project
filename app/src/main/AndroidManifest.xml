@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MatchMakers"
         tools:targetApi="31">
-
+        <activity
+            android:name=".adapter.RecommendedUserCache"
+            android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -66,7 +68,7 @@
             android:name=".network.ClusterApiService"
             android:exported="false" />
         <activity
-            android:name=".ui.CreateAccount.CreateAccount"
+            android:name=".ui.createaccount.CreateAccount"
             android:exported="false" />
         <activity
             android:name=".ui.auth.RegisterActivity"

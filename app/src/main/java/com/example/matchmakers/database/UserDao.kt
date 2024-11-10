@@ -26,4 +26,14 @@ interface UserDao {
     // Placeholder for deleting a user
     @Delete
     suspend fun deleteUser(user: User)
+
+//    Fetches all recommended users
+    @Query("SELECT * FROM user_table")
+    fun getAllRecommendedUsers(): Flow<List<User>>
+//    Inserts a list of recommended
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertRecommendedUsers(users: List<User>)
+//    Clears all recommended users
+    @Query("DELETE FROM user_table")
+    suspend fun deleteAllRecommendedUsers()
 }
