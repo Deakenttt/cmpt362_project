@@ -9,7 +9,7 @@ import androidx.core.content.ContextCompat
 
 object LocationPermissionHelper {
 
-    private const val LOCATION_PERMISSION_REQUEST_CODE = 1001
+    const val LOCATION_PERMISSION_REQUEST_CODE = 1001
 
     fun isLocationPermissionGranted(context: Context): Boolean {
         return ContextCompat.checkSelfPermission(

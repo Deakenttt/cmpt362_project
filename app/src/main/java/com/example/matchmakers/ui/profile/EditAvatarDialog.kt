@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 
 class EditAvatarDialog: DialogFragment() {
+    var profileFragment: ProfileFragment? = null
+
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bundle = arguments
         val name = bundle?.getString(DIALOG_NAME)
@@ -23,11 +25,14 @@ class EditAvatarDialog: DialogFragment() {
         val useCamera = view.findViewById<Button>(R.id.edit_camera)
         val useGallery = view.findViewById<Button>(R.id.edit_gallery)
 
-        useCamera.setOnClickListener{
-            println("Edit using camera")
-        }
-        useGallery.setOnClickListener{
-            println("Edit using gallery")
+        val fragment = profileFragment
+        if (fragment != null){
+            useCamera.setOnClickListener{
+                fragment.startUseCamera()
+            }
+            useGallery.setOnClickListener{
+                fragment.startUseGallery()
+            }
         }
 
         builder.setView(view)

@@ -7,20 +7,18 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matchmakers.R
-import com.example.matchmakers.maplogic.LocationPermissionHelper
 import com.example.matchmakers.maplogic.LocationService
-import com.example.matchmakers.maplogic.MapDataHandler
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 
 class MapFragment : Fragment(), OnMapReadyCallback {
 
-    private lateinit var mMap: GoogleMap
+    private lateinit var googleMap: GoogleMap
     private lateinit var locationService: LocationService
-    private val mapDataHandler = MapDataHandler()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +26,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_map, container, false)
 
-        // initialize location services
+        // Initializing Location Services
         locationService = LocationService(requireContext())
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
@@ -37,23 +35,20 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         return view
     }
 
-    override fun onMapReady(googleMap: GoogleMap) {
-        mMap = googleMap
+    override fun onMapReady(map: GoogleMap) {
+        googleMap = map
 
-        // check location permission and fetch last known location
-        if (LocationPermissionHelper.isLocationPermissionGranted(requireContext())) {
-            locationService.getLastKnownLocation { location ->
-                if (location != null) {
-                    val userLocation = LatLng(location.latitude, location.longitude)
-                    mMap.addMarker(mapDataHandler.createMarkerOptions(userLocation, "You are here"))
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
-                } else {
-                    Toast.makeText(context, "Unable to fetch location", Toast.LENGTH_SHORT).show()
-                }
+        // Show user's current location
+        locationService.getLastKnownLocation { location ->
+            if (location != null) {
+                val userLocation = LatLng(location.latitude, location.longitude)
+                googleMap.addMarker(MarkerOptions().position(userLocation).title("You are here"))
+                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+            } else {
+                Toast.makeText(context, "Unable to fetch location", Toast.LENGTH_SHORT).show()
             }
-        } else {
-            LocationPermissionHelper.requestLocationPermission(requireActivity())
         }
     }
- }
+}
+
 
