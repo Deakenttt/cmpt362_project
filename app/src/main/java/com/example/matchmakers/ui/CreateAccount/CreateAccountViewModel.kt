@@ -26,7 +26,9 @@ class CreateAccountViewModel : ViewModel() {
                 "latitude" to 0.0,
                 "longitude" to 0.0,
                 "cluster" to 0,
-                "recommended" to emptyList<Int>()
+                "recommended" to emptyList<Int>(),
+                "matches" to emptyList<String>() // Stores UIDs of matched users
+
             )
 
             db.collection("users").document(uid)

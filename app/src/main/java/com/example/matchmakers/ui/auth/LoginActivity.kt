@@ -1,13 +1,17 @@
 package com.example.matchmakers.ui.auth
 
+import android.Manifest
 import android.content.Intent
 import android.os.Bundle
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.matchmakers.MainActivity
 import com.example.matchmakers.R
 import com.google.android.material.textfield.TextInputEditText
@@ -18,6 +22,7 @@ class LoginActivity : AppCompatActivity() {
     private lateinit var passwordEditText: TextInputEditText
     private lateinit var loginButton: Button
     private lateinit var registerRedirectButton: Button
+    private var REQUEST_LOCATION_PERMISSION = 100
 
     private val loginViewModel: LoginViewModel by viewModels()
 
@@ -33,6 +38,21 @@ class LoginActivity : AppCompatActivity() {
         passwordEditText = findViewById(R.id.password)
         loginButton = findViewById(R.id.loginButton)
         registerRedirectButton = findViewById(R.id.registerRedirectButton)
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_COARSE_LOCATION
+                ),
+                REQUEST_LOCATION_PERMISSION
+            )
+        } else {
+            Toast.makeText(this, "MatchMakers needs location permissions", Toast.LENGTH_SHORT).show()
+        }
 
         // Observe login result
         loginViewModel.loginResult.observe(this) { success ->
