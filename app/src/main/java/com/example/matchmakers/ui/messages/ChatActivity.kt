@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
 import com.example.matchmakers.R
 import com.example.matchmakers.model.ChatMessage
 import com.example.matchmakers.ui.profile.OtherProfileActivity
@@ -17,7 +20,7 @@ class ChatActivity: AppCompatActivity() {
     private var userId = ""
     private var userName = ""
 
-    private var messagesArray = ArrayList<ChatMessage>()
+    private var messagesArray = listOf<ChatMessage>()
     private lateinit var chatList: ListView
     private lateinit var adapter: ChatAdapter
 
@@ -65,22 +68,31 @@ class ChatActivity: AppCompatActivity() {
         }
 
         // Change this later to get the actual chat with the user from the database
-        messagesArray = arrayListOf(
-            ChatMessage(fromUserId="1", message="This"),
-            ChatMessage(fromUserId="1", message="is"),
-            ChatMessage(fromUserId="1", message="an"),
-            ChatMessage(fromUserId="1", message="example"),
-            ChatMessage(fromUserId="1", message="chat"),
-            ChatMessage(fromUserId="0", message="It will be replaced with actual data from the database later"),
-            ChatMessage(fromUserId="1", message="This"),
-            ChatMessage(fromUserId="1", message="is"),
-            ChatMessage(fromUserId="1", message="here"),
-            ChatMessage(fromUserId="0", message="to make sure the UI is working and it can display long messages 9h oi wuibiunnj miklnijop pji a nm, xc knd jkm; klfl ;kmrt jrklm t; jierre xz 89u0 hx  nkl  mlk;r6f qwmpik ljnk u8 t9ihu4 "),
-            ChatMessage(fromUserId="1", message="Later, this data class can support other types of messages such as images")
-        )
+//        messagesArray = arrayListOf(
+//            ChatMessage(fromUserId="1", message="This"),
+//            ChatMessage(fromUserId="1", message="is"),
+//            ChatMessage(fromUserId="1", message="an"),
+//            ChatMessage(fromUserId="1", message="example"),
+//            ChatMessage(fromUserId="1", message="chat"),
+//            ChatMessage(fromUserId="0", message="It will be replaced with actual data from the database later"),
+//            ChatMessage(fromUserId="1", message="This"),
+//            ChatMessage(fromUserId="1", message="is"),
+//            ChatMessage(fromUserId="1", message="here"),
+//            ChatMessage(fromUserId="0", message="to make sure the UI is working and it can display long messages 9h oi wuibiunnj miklnijop pji a nm, xc knd jkm; klfl ;kmrt jrklm t; jierre xz 89u0 hx  nkl  mlk;r6f qwmpik ljnk u8 t9ihu4 "),
+//            ChatMessage(fromUserId="1", message="Later, this data class can support other types of messages such as images")
+//        )
         chatList = findViewById(R.id.chat_list)
         adapter = ChatAdapter(this, messagesArray, currentUserId)
         chatList.adapter = adapter
+
+        val chatViewModel: ChatViewModel by viewModels()
+        chatViewModel.fetchMessages(conversationId)
+        chatViewModel.messages.observe(this, Observer { messages ->
+            messagesArray = messages
+            println("mgs: messages: $messages")
+            adapter.updateEntries(messagesArray)
+        })
+
     }
 
     companion object{

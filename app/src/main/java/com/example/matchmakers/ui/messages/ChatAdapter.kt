@@ -22,6 +22,11 @@ class ChatAdapter(private val context: Context, private var entries: List<ChatMe
         return entries.size
     }
 
+    fun updateEntries(newEntries: List<ChatMessage>) {
+        entries = newEntries
+        notifyDataSetChanged()
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = View.inflate(context, R.layout.chat_list_item, null)
 
@@ -32,7 +37,7 @@ class ChatAdapter(private val context: Context, private var entries: List<ChatMe
         text.text = data.message
 
         // If the user sending the message is the same as the user who is logged in, display the message aligned right
-        if (data.fromUserId == userId){
+        if (data.senderId == userId){
             val params = text.layoutParams as RelativeLayout.LayoutParams
             params.addRule(RelativeLayout.ALIGN_PARENT_END, RelativeLayout.TRUE)
             text.layoutParams = params
