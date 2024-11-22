@@ -8,5 +8,7 @@ data class User(
     @PrimaryKey val id: String,
     val name: String,
     val age: Int,
-    val interest: String
+    val interest: String,
+    val lastMessage: String,
+    val conversationId: String
 )
