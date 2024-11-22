@@ -39,17 +39,16 @@ class LoginActivity : AppCompatActivity() {
         loginButton = findViewById(R.id.loginButton)
         registerRedirectButton = findViewById(R.id.registerRedirectButton)
 
+        val permissions = arrayOf(
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        )
+
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
             ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_COARSE_LOCATION
-                ),
-                REQUEST_LOCATION_PERMISSION
-            )
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_LOCATION_PERMISSION)
+
         } else {
             Toast.makeText(this, "MatchMakers needs location permissions", Toast.LENGTH_SHORT).show()
         }

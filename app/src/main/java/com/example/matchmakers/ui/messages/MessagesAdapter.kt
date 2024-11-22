@@ -21,6 +21,11 @@ class MessagesAdapter(private val context: Context, private var entries: List<Us
         return entries.size
     }
 
+    fun updateEntries(newEntries: List<User>) {
+        entries = newEntries
+        notifyDataSetChanged()
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view = View.inflate(context, R.layout.messages_list_item, null)
 
@@ -32,7 +37,7 @@ class MessagesAdapter(private val context: Context, private var entries: List<Us
 
         username.text = data.name
         age.text = data.age.toString()
-        lastMessage.text = "Last message"
+        lastMessage.text = data.lastMessage
 
         return view
     }

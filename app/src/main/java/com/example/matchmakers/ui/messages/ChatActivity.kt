@@ -13,6 +13,7 @@ import com.example.matchmakers.ui.profile.OtherProfileActivity
 
 class ChatActivity: AppCompatActivity() {
     private var currentUserId = ""
+    private var conversationId = ""
     private var userId = ""
     private var userName = ""
 
@@ -28,10 +29,14 @@ class ChatActivity: AppCompatActivity() {
         setContentView(R.layout.activity_chat)
 
         val intentCurrentUser = intent.getStringExtra(CURRENT_USER_ID_KEY)
+        val intentConversationId = intent.getStringExtra(CONVERSATION_ID_KEY)
         val intentUserId = intent.getStringExtra(USER_ID_KEY)
         val intentUserName = intent.getStringExtra(USER_NAME_KEY)
         if (intentCurrentUser != null){
             currentUserId = intentCurrentUser
+        }
+        if (intentConversationId != null){
+            conversationId = intentConversationId
         }
         if (intentUserId != null){
             userId = intentUserId
@@ -82,5 +87,6 @@ class ChatActivity: AppCompatActivity() {
         const val USER_ID_KEY = "id"
         const val USER_NAME_KEY = "username"
         const val CURRENT_USER_ID_KEY = "current_id"
+        const val CONVERSATION_ID_KEY = "conversation_id"
     }
 }
