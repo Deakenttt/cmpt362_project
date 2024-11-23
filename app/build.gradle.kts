@@ -81,6 +81,8 @@ dependencies {
     // HTTP client
     implementation("com.squareup.okhttp3:okhttp:4.9.2") // HTTP client for network requests
 
+    implementation ("com.google.android.material:material:1.9.0") // cards view in home page
+
 }
 // Apply Google Services plugin at the bottom (required for Firebase)
 apply(plugin = "com.google.gms.google-services")

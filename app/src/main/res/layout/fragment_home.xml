@@ -1,6 +1,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:fillViewport="true">
 
     <LinearLayout
@@ -10,12 +11,12 @@
         android:padding="16dp">
 
         <!-- Card 1 -->
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:cardCornerRadius="8dp"
-            android:elevation="4dp">
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -23,24 +24,24 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <ImageView
-                    android:id="@+id/user_image_1"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/sample_user_image" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/user_image_1"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="200dp"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:src="@drawable/sample_user_image" />-->
 
                 <TextView
-                    android:id="@+id/user_name_1"
+                    android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User Name 1"
+                    android:text="User Name"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:paddingTop="8dp" />
 
                 <TextView
-                    android:id="@+id/user_age_1"
+                    android:id="@+id/user_age"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Age: 25"
@@ -75,15 +76,15 @@
 
                 </LinearLayout>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Card 2 -->
-        <androidx.cardview.widget.CardView
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:cardCornerRadius="8dp"
-            android:elevation="4dp">
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -91,28 +92,21 @@
                 android:orientation="vertical"
                 android:padding="16dp">
 
-                <ImageView
-                    android:id="@+id/user_image_2"
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/sample_user_image" />
+<!--                <ImageView-->
+<!--                    android:id="@+id/user_image_2"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="200dp"-->
+<!--                    android:scaleType="centerCrop"-->
+<!--                    android:src="@drawable/sample_user_image" />-->
 
                 <TextView
-                    android:id="@+id/user_name_2"
+                    android:id="@+id/describle1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User Name 2"
+                    android:text="describle photo 1"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:paddingTop="8dp" />
-
-                <TextView
-                    android:id="@+id/user_age_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Age: 27"
-                    android:paddingTop="4dp" />
 
                 <TextView
                     android:id="@+id/user_interest_2"
@@ -143,19 +137,71 @@
 
                 </LinearLayout>
             </LinearLayout>
-        </androidx.cardview.widget.CardView>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Card 3 -->
         <!-- Repeat similar structure for Cards 3, 4, 5, and 6 with unique IDs (user_image_3, user_name_3, etc.) -->
 
-        <androidx.cardview.widget.CardView
+        <!-- Card 2 -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:cardCornerRadius="8dp"
-            android:elevation="4dp">
-            <!-- Card structure with IDs user_image_3, user_name_3, etc. -->
-        </androidx.cardview.widget.CardView>
+            app:cardCornerRadius="8dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!--                <ImageView-->
+                <!--                    android:id="@+id/user_image_2"-->
+                <!--                    android:layout_width="match_parent"-->
+                <!--                    android:layout_height="200dp"-->
+                <!--                    android:scaleType="centerCrop"-->
+                <!--                    android:src="@drawable/sample_user_image" />-->
+
+                <TextView
+                    android:id="@+id/describle2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="describle photo 2"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:paddingTop="8dp" />
+
+                <TextView
+                    android:id="@+id/user_interest_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Interests: Music, Art"
+                    android:paddingTop="4dp" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingTop="12dp">
+
+                    <Button
+                        android:id="@+id/like_button_3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Like" />
+
+                    <Button
+                        android:id="@+id/dislike_button_3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dislike" />
+
+                </LinearLayout>
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- Repeat for Card 4 -->
 

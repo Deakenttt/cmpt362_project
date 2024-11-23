@@ -1,4 +1,3 @@
-// HomeViewModel.kt
 package com.example.matchmakers.ui.home
 
 import androidx.lifecycle.LiveData
@@ -7,56 +6,85 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.matchmakers.adapter.RecommendedUserCache
 import com.example.matchmakers.model.User
-import com.example.matchmakers.repository.UserRepository
+import com.example.matchmakers.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
-class HomeViewModel(private val userRepository: UserRepository) : ViewModel() {
+class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
 
-    private val userCache = RecommendedUserCache() // Acts as a local cache of recommended users
-    private val _currentUser = MutableLiveData<User?>() // Holds the currently displayed user
-    val currentUser: LiveData<User?> get() = _currentUser
+    private val userCache = RecommendedUserCache() // Local cache for recommended users
+    private val _currentRecommendedUser = MutableLiveData<User?>() // Holds the currently displayed recommended user
+    val currentRecommendedUser: LiveData<User?> get() = _currentRecommendedUser
+
+    private val _errorMessage = MutableLiveData<String?>() // Holds error messages
+    val errorMessage: LiveData<String?> get() = _errorMessage
 
     init {
-        loadRecommendedUsers() // Load users when ViewModel is initialized
+        loadRecommendedUsers()
     }
 
-    // Load recommended users from the repository and populate the cache
+    /**
+     * Fetch recommended users via `UserViewModel` and populate the cache.
+     */
     private fun loadRecommendedUsers() {
         viewModelScope.launch {
-            val recommendedUsers = userRepository.getRecommendedUsersForCurrentUser() // Fetch recommended users
-            if (recommendedUsers.isNotEmpty()) {
-                userCache.setUsers(recommendedUsers) // Load into cache
-                _currentUser.value = userCache.getNextUser() // Start by displaying the first user
-            } else {
-                _currentUser.value = null // Set to null if no users are available
+            try {
+                userViewModel.fetchRecommendedUsersForCurrentUser().join() // Trigger the fetching in UserViewModel
+                val recommendedUsers = userViewModel.recommendedUsers.value ?: emptyList()
+
+                if (recommendedUsers.isNotEmpty()) {
+                    userCache.setUsers(recommendedUsers)
+                    _currentRecommendedUser.value = userCache.getNextUser()
+
+                    _errorMessage.value = null
+                } else {
+                    _currentRecommendedUser.value = null
+                    _errorMessage.value = "No recommended users available."
+                }
+            } catch (e: Exception) {
+                _currentRecommendedUser.value = null
+                _errorMessage.value = "Failed to load recommended users: ${e.localizedMessage}"
             }
         }
     }
 
-    // Display the next user in the cache
+    /**
+     * Display the next user in the cache.
+     */
     fun showNextUser() {
-        _currentUser.value = userCache.getNextUser() ?: run {
-            userCache.resetIndex() // Reset to the beginning if we reached the end
+        _currentRecommendedUser.value = userCache.getNextUser() ?: run {
+            userCache.resetIndex()
             userCache.getNextUser()
         }
     }
 
-    // Like action placeholder - additional logic for "like" can be added here
+    /**
+     * Like action placeholder - additional logic for liking can be added here.
+     */
     fun likeUser() {
-        // This is a placeholder for any specific logic you want to add for "liking" a user
+        // Logic for liking a user can be added here if needed
+        showNextUser()
     }
 
-    // Dislike action - move to the next user
+    /**
+     * Dislike action - move to the next user.
+     */
     fun dislikeUser() {
         showNextUser()
     }
 
-    // Refresh the cache from the repository if needed
+    /**
+     * Refresh the cache via `UserViewModel` if needed.
+     */
     fun refreshRecommendedUsers() {
         viewModelScope.launch {
-            val updatedUsers = userRepository.getRecommendedUsersForCurrentUser()
-            userCache.reload(updatedUsers) // Refresh cache
-            _currentUser.value = userCache.getNextUser() // Display the first user in the updated cache
+            try {
+                userViewModel.fetchRecommendedUsersForCurrentUser().join()
+                val updatedUsers = userViewModel.recommendedUsers.value ?: emptyList()
+                userCache.reload(updatedUsers)
+                _currentRecommendedUser.value = userCache.getNextUser()
+            } catch (e: Exception) {
+                _errorMessage.value = "Failed to refresh recommended users: ${e.localizedMessage}"
+            }
         }
     }
 }
