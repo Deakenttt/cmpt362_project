@@ -29,7 +29,16 @@ class  MainActivity : AppCompatActivity() {
             LocationPermissionHelper.requestLocationPermission(this)
 
         } else {
-            LocationService(this).getLocation()
+            LocationService(this).getLocation{ location ->
+                if (location != null) {
+                    // Handle the location here
+                    val latitude = location.latitude
+                    val longitude = location.longitude
+                    println("Location: $latitude, $longitude")
+                } else {
+                    Toast.makeText(this, "Unable to fetch location", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
 
         binding = ActivityMainBinding.inflate(layoutInflater)
