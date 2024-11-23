@@ -17,34 +17,34 @@ class MessagesViewModel : ViewModel() {
     private val _conversationIds = MutableLiveData<List<String>>()
     val conversationIds: LiveData<List<String>> get() = _conversationIds
 
-    private val _lastMessage = MutableLiveData<String>()
-    val lastMessage: LiveData<String> get() = _lastMessage
+    private val _lastMessage = MutableLiveData<Map<String, String>>() // ConversationId -> LastMessage
+    val lastMessage: LiveData<Map<String, String>> get() = _lastMessage
 
     private val _usersList = MutableLiveData<List<User>>()
     val usersList: LiveData<List<User>> get() = _usersList
 
-    private val _messageReceiver = MutableLiveData<String?>()
-    val messageReceiver: MutableLiveData<String?> get() = _messageReceiver
-
-    // Function to fetch all matches (messages user has).
     fun fetchMatches() {
         val currentUser = auth.currentUser ?: return
         val currentUid = currentUser.uid
 
         db.collection("conversations")
             .whereArrayContains("participants", currentUid)
-            .get()
-            .addOnSuccessListener { documents ->
-                handleConversations(documents, currentUid)
-            }
-            .addOnFailureListener { exception ->
-                println("mgs: Error getting documents: $exception")
+            .addSnapshotListener { documents, error ->
+                if (error != null) {
+                    println("mgs: Error getting documents: $error")
+                    return@addSnapshotListener
+                }
+
+                documents?.let {
+                    handleConversations(it, currentUid)
+                }
             }
     }
 
     private fun handleConversations(documents: QuerySnapshot, currentUid: String) {
         val conversationIdsList = mutableListOf<String>()
         val usersList = mutableListOf<User>()
+        val lastMessageMap = mutableMapOf<String, String>()
 
         if (documents.isEmpty) {
             println("mgs: No conversations found")
@@ -56,8 +56,7 @@ class MessagesViewModel : ViewModel() {
             conversationIdsList.add(conversationId)
 
             val messageText = getLastMessageText(document)
-            _lastMessage.value = messageText
-            println("mgs: Last message text: $messageText")
+            lastMessageMap[conversationId] = messageText
 
             val participants = document.get("participants") as? List<String>
             participants?.let {
@@ -65,8 +64,8 @@ class MessagesViewModel : ViewModel() {
             }
         }
 
-        // Update LiveData
         _conversationIds.value = conversationIdsList
+        _lastMessage.value = lastMessageMap
     }
 
     private fun getLastMessageText(document: DocumentSnapshot): String {
@@ -87,12 +86,13 @@ class MessagesViewModel : ViewModel() {
             .get()
             .addOnSuccessListener { userDoc ->
                 val user = createUserFromDocument(userDoc, otherUserUid, conversationId)
-                usersList.add(user)
+                synchronized(usersList) {
+                    usersList.add(user)
+                }
 
-                // Update the LiveData with the list of users
-                _usersList.value = usersList
-
-                println("mgs: Other user name: ${user.name}, Age: ${user.age}")
+                if (usersList.size == _conversationIds.value?.size) {
+                    _usersList.value = usersList
+                }
             }
             .addOnFailureListener { exception ->
                 println("mgs: Error fetching user data: $exception")
@@ -108,39 +108,8 @@ class MessagesViewModel : ViewModel() {
         val age = userDoc.getLong("age")?.toInt() ?: 0
         val interest = userDoc.getString("interest") ?: "Unknown interest"
 
-        return User(otherUserUid, userName, age, interest, _lastMessage.value!!, conversationId)
+        return User(otherUserUid, userName, age, interest, "", conversationId)
     }
-
-    fun getMessageReceiverId(conversationId: String) {
-        val currentUser = auth.currentUser
-        if (currentUser == null) {
-            _messageReceiver.value = "User is not authenticated"
-            return
-        }
-
-        val currentUserUid = currentUser.uid
-        val conversationRef = db.collection("conversations").document(conversationId)
-
-        conversationRef.get()
-            .addOnSuccessListener { conversation ->
-                if (!conversation.exists()) {
-                    _messageReceiver.value = "Conversation does not exist"
-                    return@addOnSuccessListener
-                }
-
-                val participants = conversation.get("participants") as? List<String>
-                if (participants == null) {
-                    _messageReceiver.value = "Participants not found in conversation"
-                    return@addOnSuccessListener
-                }
-
-                val otherUserUid = participants.find { it != currentUserUid }
-                _messageReceiver.value = otherUserUid ?: "No other user found in conversation"
-            }
-            .addOnFailureListener { e ->
-                _messageReceiver.value = "Failed to get conversation: ${e.message}"
-            }
-    }
-
 }
+
 

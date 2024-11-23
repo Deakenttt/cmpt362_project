@@ -56,8 +56,6 @@ class  MainActivity : AppCompatActivity() {
 
     }
 
-
-
     private fun updateClusters() {
         RetrofitInstance.api.updateClusters().enqueue(object : Callback<Void> {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {

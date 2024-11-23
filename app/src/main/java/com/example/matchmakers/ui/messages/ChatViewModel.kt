@@ -24,24 +24,29 @@ class ChatViewModel : ViewModel() {
     fun fetchMessages(conversationId: String) {
         val currentUser = auth.currentUser
         if (currentUser != null) {
-            val conversations = db.collection("conversations")
-            conversations.document(conversationId)
-                .get()
-                .addOnSuccessListener { conversation ->
-                    if (conversation.exists()) {
-                        val messages = conversation.get("messages") as? List<Map<String, Any>>
-                        println("mgs: message value: $messages")
-                        if (messages != null) {
-                            _messages.value = messages.mapNotNull { map ->
-                                mapToChatMessage(map)
-                            }
-                        } else {
-                            _messages.value = emptyList()
+            val conversationRef = db.collection("conversations").document(conversationId)
+
+            conversationRef.addSnapshotListener { snapshot, error ->
+                if (error != null) {
+                    println("mgs: Error fetching messages: $error")
+                    return@addSnapshotListener
+                }
+
+                if (snapshot != null && snapshot.exists()) {
+                    val messages = snapshot.get("messages") as? List<Map<String, Any>>
+                    println("mgs: Real-time messages update: $messages")
+                    if (messages != null) {
+                        _messages.value = messages.mapNotNull { map ->
+                            mapToChatMessage(map)
                         }
+                    } else {
+                        _messages.value = emptyList()
                     }
                 }
+            }
         }
     }
+
 
     private fun mapToChatMessage(map: Map<String, Any>): ChatMessage? {
         println("mgs: Map contents: $map ")
