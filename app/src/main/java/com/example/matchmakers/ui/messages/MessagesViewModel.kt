@@ -23,6 +23,9 @@ class MessagesViewModel : ViewModel() {
     private val _usersList = MutableLiveData<List<User>>()
     val usersList: LiveData<List<User>> get() = _usersList
 
+    private val _messageReceiver = MutableLiveData<String?>()
+    val messageReceiver: MutableLiveData<String?> get() = _messageReceiver
+
     // Function to fetch all matches (messages user has).
     fun fetchMatches() {
         val currentUser = auth.currentUser ?: return
@@ -107,5 +110,37 @@ class MessagesViewModel : ViewModel() {
 
         return User(otherUserUid, userName, age, interest, _lastMessage.value!!, conversationId)
     }
+
+    fun getMessageReceiverId(conversationId: String) {
+        val currentUser = auth.currentUser
+        if (currentUser == null) {
+            _messageReceiver.value = "User is not authenticated"
+            return
+        }
+
+        val currentUserUid = currentUser.uid
+        val conversationRef = db.collection("conversations").document(conversationId)
+
+        conversationRef.get()
+            .addOnSuccessListener { conversation ->
+                if (!conversation.exists()) {
+                    _messageReceiver.value = "Conversation does not exist"
+                    return@addOnSuccessListener
+                }
+
+                val participants = conversation.get("participants") as? List<String>
+                if (participants == null) {
+                    _messageReceiver.value = "Participants not found in conversation"
+                    return@addOnSuccessListener
+                }
+
+                val otherUserUid = participants.find { it != currentUserUid }
+                _messageReceiver.value = otherUserUid ?: "No other user found in conversation"
+            }
+            .addOnFailureListener { e ->
+                _messageReceiver.value = "Failed to get conversation: ${e.message}"
+            }
+    }
+
 }
 

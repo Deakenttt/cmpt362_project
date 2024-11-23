@@ -3,6 +3,7 @@ package com.example.matchmakers.ui.messages
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -19,6 +20,10 @@ class ChatActivity: AppCompatActivity() {
     private var conversationId = ""
     private var userId = ""
     private var userName = ""
+    private var receiverId = ""
+
+    private lateinit var sendButton: Button
+    private lateinit var textToSend: EditText
 
     private var messagesArray = listOf<ChatMessage>()
     private lateinit var chatList: ListView
@@ -35,6 +40,7 @@ class ChatActivity: AppCompatActivity() {
         val intentConversationId = intent.getStringExtra(CONVERSATION_ID_KEY)
         val intentUserId = intent.getStringExtra(USER_ID_KEY)
         val intentUserName = intent.getStringExtra(USER_NAME_KEY)
+        intent.getStringExtra(RECEIVER_ID_KEY)
         if (intentCurrentUser != null){
             currentUserId = intentCurrentUser
         }
@@ -58,6 +64,7 @@ class ChatActivity: AppCompatActivity() {
 
         usernameText = findViewById(R.id.chat_username)
         usernameText.text = userName
+
 
         viewProfileButton = findViewById(R.id.chat_view_profile)
         viewProfileButton.setOnClickListener{
@@ -85,6 +92,9 @@ class ChatActivity: AppCompatActivity() {
         adapter = ChatAdapter(this, messagesArray, currentUserId)
         chatList.adapter = adapter
 
+        sendButton = findViewById(R.id.chat_send)
+        textToSend = findViewById(R.id.chat_input)
+
         val chatViewModel: ChatViewModel by viewModels()
         chatViewModel.fetchMessages(conversationId)
         chatViewModel.messages.observe(this, Observer { messages ->
@@ -93,6 +103,24 @@ class ChatActivity: AppCompatActivity() {
             adapter.updateEntries(messagesArray)
         })
 
+        val timestamp = chatViewModel.getCurrentTimestamp()
+
+        sendButton.setOnClickListener{
+            val msgToSend = textToSend.text.toString()
+            val messageObject = chatViewModel.stringToChatMessage(
+                "",
+                "text",
+                userId,
+                currentUserId,
+                msgToSend,
+                timestamp
+                )
+
+            chatViewModel.sendMessage(messageObject, conversationId)
+            textToSend.setText("")
+            // Refresh if needed unless listeners take care of this
+        }
+
     }
 
     companion object{
@@ -100,5 +128,6 @@ class ChatActivity: AppCompatActivity() {
         const val USER_NAME_KEY = "username"
         const val CURRENT_USER_ID_KEY = "current_id"
         const val CONVERSATION_ID_KEY = "conversation_id"
+        const val RECEIVER_ID_KEY = "receiver_id"
     }
 }
