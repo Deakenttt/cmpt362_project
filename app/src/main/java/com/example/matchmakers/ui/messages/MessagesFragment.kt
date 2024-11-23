@@ -19,6 +19,7 @@ class MessagesFragment: Fragment() {
     private var usersArray = listOf<User>()
     private lateinit var messagesList: ListView
     private lateinit var adapter: MessagesAdapter
+    private lateinit var receiverId: String
     private val auth = FirebaseAuth.getInstance()
 
     private var _binding: FragmentMessagesBinding? = null
@@ -51,9 +52,9 @@ class MessagesFragment: Fragment() {
         messagesList.adapter = adapter
 
         val currentUserId = auth.currentUser?.uid
-
         messagesList.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _: Long ->
             println(usersArray[position].name)
+
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(ChatActivity.USER_ID_KEY, usersArray[position].id)
             intent.putExtra(ChatActivity.USER_NAME_KEY, usersArray[position].name)
