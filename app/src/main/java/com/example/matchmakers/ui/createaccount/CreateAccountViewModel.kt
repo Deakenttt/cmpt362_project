@@ -1,4 +1,4 @@
-package com.example.matchmakers.ui.CreateAccount
+package com.example.matchmakers.ui.createaccount
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
