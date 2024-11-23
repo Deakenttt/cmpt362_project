@@ -8,6 +8,7 @@ import com.example.matchmakers.R
 import com.example.matchmakers.maplogic.LocationService
 import com.example.matchmakers.UserInfo
 import com.example.matchmakers.mapslogic.MapDataHandler
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
