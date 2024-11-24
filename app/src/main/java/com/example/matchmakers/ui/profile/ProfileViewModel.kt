@@ -9,9 +9,13 @@ import androidx.lifecycle.ViewModel
 import com.example.matchmakers.ProfileInfo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.Firebase
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.storage
 import java.io.ByteArrayOutputStream
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 class ProfileViewModel: ViewModel() {
     private val avatarPath = "avatars/"
@@ -135,6 +139,14 @@ class ProfileViewModel: ViewModel() {
             println("Updated profile")
         }.addOnFailureListener{ error ->
             println("Could not update profile: $error")
+        }
+
+        val calendar = Calendar.getInstance()
+        val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+        db.collection("users").document(user.uid).update("timestamp", timestamp).addOnSuccessListener {
+            println("updated timestamp")
+        }.addOnFailureListener{ error->
+            println("Could not update timestamp: $error")
         }
     }
 }
