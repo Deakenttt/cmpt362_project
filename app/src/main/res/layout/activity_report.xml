@@ -57,9 +57,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Other Reason (please specify)"/>
+            android:text="Additional information included in the report"/>
 
         <EditText
+            android:id="@+id/report_other_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textMultiLine"

@@ -15,7 +15,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.GridView
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
@@ -24,11 +23,9 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.example.matchmakers.ProfileInfo
 import com.example.matchmakers.R
 import com.example.matchmakers.databinding.FragmentProfileBinding
 import com.example.matchmakers.ui.auth.LoginActivity
-import okhttp3.internal.notify
 import java.io.File
 import java.io.Serializable
 import kotlin.collections.List
@@ -208,7 +205,7 @@ class ProfileFragment: Fragment() {
         if (profile != null){
             profileViewModel.currentProfile.value?.name = name
             profileViewModel.currentProfile.value?.age = age ?: 0
-            profileViewModel.currentProfile.value?.biography = biography// = ProfileInfo(name, age ?: 0, interestsArray.toList(), biography)
+            profileViewModel.currentProfile.value?.biography = biography
             profileViewModel.saveProfile()
 
             Toast.makeText(context, "Profile Saved", Toast.LENGTH_SHORT).show()
