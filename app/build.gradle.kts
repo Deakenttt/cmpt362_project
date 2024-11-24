@@ -83,6 +83,20 @@ dependencies {
 
     implementation ("com.google.android.material:material:1.9.0") // cards view in home page
 
+    // Add WorkManager
+    implementation ("androidx.work:work-runtime-ktx:2.8.1")
+
+    // Optional: Add support for RxJava if needed
+    implementation ("androidx.work:work-rxjava3:2.8.1")
+
+    // Optional: Add support for testing workers
+    androidTestImplementation ("androidx.work:work-testing:2.8.1")
+
+    implementation("io.insert-koin:koin-android:3.4.1") // Core Koin library for Android
+
+    implementation("io.insert-koin:koin-androidx-workmanager:3.4.1") // For WorkManager integration (optional)
+    implementation("io.insert-koin:koin-androidx-navigation:3.4.1") // For navigation integration (optional)
+
 }
 // Apply Google Services plugin at the bottom (required for Firebase)
 apply(plugin = "com.google.gms.google-services")

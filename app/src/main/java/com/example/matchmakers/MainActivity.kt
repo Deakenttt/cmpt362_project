@@ -1,5 +1,6 @@
 package com.example.matchmakers
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
@@ -13,6 +14,8 @@ import com.example.matchmakers.network.RetrofitInstance
 import com.example.matchmakers.databinding.ActivityMainBinding
 import com.example.matchmakers.maplogic.LocationPermissionHelper
 import com.example.matchmakers.maplogic.LocationService
+import com.example.matchmakers.ui.auth.LoginActivity
+import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,9 +23,21 @@ import retrofit2.Response
 class  MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Check if the user is logged in
+        if (auth.currentUser == null) {
+            // Redirect to LoginActivity if not logged in
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+        val currentUser = auth.currentUser
+        val userId = currentUser?.uid
+        println("Current Logged-In User ID: $userId")
 
         // Check and request location permission if not granted
         if(!LocationPermissionHelper.isLocationPermissionGranted(this)) {

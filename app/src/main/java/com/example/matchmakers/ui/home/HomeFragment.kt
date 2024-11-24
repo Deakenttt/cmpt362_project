@@ -5,11 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
-import com.example.matchmakers.R
 import com.example.matchmakers.databinding.FragmentHomeBinding
-import com.example.matchmakers.repository.UserRepository
+import com.example.matchmakers.repository.LocalUserRepository
 import com.example.matchmakers.viewmodel.UserViewModel
 import com.example.matchmakers.viewmodel.UserViewModelFactory
 import com.example.matchmakers.model.User
@@ -51,7 +49,7 @@ class HomeFragment : Fragment() {
         val userDao = userDatabase.userDao()
 
         // Initialize UserRepository with UserDao
-        val userRepository = UserRepository(userDao)
+        val userRepository = LocalUserRepository(userDao)
 
         // Initialize UserViewModel with UserViewModelFactory
         val userViewModelFactory = UserViewModelFactory(userRepository)
@@ -83,7 +81,7 @@ class HomeFragment : Fragment() {
     private fun setupButtons() {
         // Handle like and dislike button clicks
         binding.likeButton1.setOnClickListener { homeViewModel.likeUser() }
-        binding.dislikeButton1.setOnClickListener { homeViewModel.showNextUser() }
+        binding.dislikeButton1.setOnClickListener { homeViewModel.dislikeUser() }
     }
 
     /**
