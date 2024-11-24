@@ -9,7 +9,8 @@ import com.example.matchmakers.databinding.FragmentMatchListBinding
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.matchmakers.database.UserDatabase
-import com.example.matchmakers.repository.UserRepository
+// DK modified
+import com.example.matchmakers.repository.LocalUserRepository
 import com.example.matchmakers.ui.home.HomeViewModel
 import com.example.matchmakers.ui.home.HomeViewModelFactory
 import com.example.matchmakers.viewmodel.UserViewModel
@@ -41,7 +42,7 @@ class MatchListFragment : Fragment() {
         // get UserViewModel
         val userDatabase = UserDatabase.getDatabase(requireContext())
         val userDao = userDatabase.userDao()
-        val userRepository = UserRepository(userDao)
+        val userRepository = LocalUserRepository(userDao)
         val userViewModelFactory = UserViewModelFactory(userRepository)
         val userViewModel = ViewModelProvider(requireActivity(), userViewModelFactory)[UserViewModel::class.java]
 
@@ -51,11 +52,12 @@ class MatchListFragment : Fragment() {
     }
 
     private fun setupListView() {
+        // DK commend
         // Observe liked users and set them in the ListView
-        homeViewModel.getLikedUsers().observe(viewLifecycleOwner) { likedUsers ->
-            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, likedUsers.map { it.name })
-            binding.matchList.adapter = adapter
-        }
+//        homeViewModel.getLikedUsers().observe(viewLifecycleOwner) { likedUsers ->
+//            val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, likedUsers.map { it.name })
+//            binding.matchList.adapter = adapter
+//        }
     }
 
     override fun onDestroyView() {

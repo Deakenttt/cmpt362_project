@@ -20,7 +20,8 @@ import com.example.matchmakers.databinding.FragmentDashboardBinding
 import com.example.matchmakers.maplogic.LocationPermissionHelper
 import com.example.matchmakers.match.MatchListFragment
 import com.example.matchmakers.match.MatchListAdapter
-import com.example.matchmakers.repository.UserRepository
+// DK modified
+import com.example.matchmakers.repository.LocalUserRepository
 import com.example.matchmakers.ui.home.HomeViewModel
 import com.example.matchmakers.ui.home.HomeViewModelFactory
 import com.example.matchmakers.ui.mapview.MapActivity
@@ -65,7 +66,7 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
         // get UserDatabase 和 UserRepository
         val userDatabase = UserDatabase.getDatabase(requireContext())
         val userDao = userDatabase.userDao()
-        val userRepository = UserRepository(userDao)
+        val userRepository = LocalUserRepository(userDao)
 
         // use UserViewModelFactory create UserViewModel
         val userViewModelFactory = UserViewModelFactory(userRepository)
@@ -79,10 +80,11 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
 
 
     private fun setupRecyclerView() {
-        binding.matchRecyclerView.adapter = matchListAdapter
-        homeViewModel.getLikedUsers().observe(viewLifecycleOwner) { likedUsers ->
-            matchListAdapter.submitList(likedUsers.takeLast(10))
-        }
+        // DK commend
+//        binding.matchRecyclerView.adapter = matchListAdapter
+//        homeViewModel.getLikedUsers().observe(viewLifecycleOwner) { likedUsers ->
+//            matchListAdapter.submitList(likedUsers.takeLast(10))
+//        }
     }
 
     private fun setupButtons() {

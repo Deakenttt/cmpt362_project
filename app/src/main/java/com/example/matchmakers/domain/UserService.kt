@@ -80,7 +80,9 @@ class UserService(
      */
     private suspend fun fetchIncrementalUpdates(recommendedClusters: List<Int>): List<User> {
         val lastFetched = localUserRepository.getLastFetchedTimestamp() ?: 0L
-        return remoteUserRepository.getIncrementalUpdates(lastFetched, recommendedClusters)
+        //DK commend (missing timestamp)
+//        return remoteUserRepository.getIncrementalUpdates(lastFetched, recommendedClusters)
+        return remoteUserRepository.getRecommendedUsers(recommendedClusters)
     }
 
     /**

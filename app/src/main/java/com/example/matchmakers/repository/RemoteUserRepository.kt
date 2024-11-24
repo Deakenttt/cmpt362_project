@@ -19,33 +19,53 @@ class RemoteUserRepository {
         return userId
     }
 
+    /**
+     * Fetch recommended clusters for the given user ID.
+     */
     suspend fun getRecommendedClusters(userId: String): List<Int> {
+        Log.d(TAG, "getRecommendedClusters: Fetching recommended clusters for userId = $userId")
         return try {
             val userDoc = userCollection.document(userId).get().await()
-            userDoc.get("recommended") as? List<Int> ?: emptyList()
+            val recommendedClusters = userDoc.get("recommended") as? List<Int> ?: emptyList()
+            Log.d(TAG, "getRecommendedClusters: Retrieved clusters = $recommendedClusters")
+            recommendedClusters
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching recommended clusters: ${e.message}")
+            Log.e(TAG, "getRecommendedClusters: Error fetching recommended clusters: ${e.message}", e)
             emptyList()
         }
     }
 
+    /**
+     * Fetch recommended users for the given list of clusters.
+     */
     suspend fun getRecommendedUsers(recommendedClusters: List<Int>): List<User> {
+        Log.d(TAG, "getRecommendedUsers: Fetching users for clusters = $recommendedClusters")
         return try {
-            userCollection.whereIn("cluster", recommendedClusters)
+            val users = userCollection.whereIn("cluster", recommendedClusters)
                 .limit(60)
                 .get()
                 .await()
                 .toObjects(User::class.java)
                 .map { user -> user.copy(lastUpdated = System.currentTimeMillis()) }
+
+            Log.d(TAG, "getRecommendedUsers: Retrieved ${users.size} users")
+            users
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching recommended users: ${e.message}")
+            Log.e(TAG, "getRecommendedUsers: Error fetching recommended users: ${e.message}", e)
             emptyList()
         }
     }
 
+    /**
+     * Fetch incremental updates since the given lastFetched timestamp.
+     */
     suspend fun getIncrementalUpdates(lastFetched: Long, recommendedClusters: List<Int>): List<User> {
+        Log.d(
+            TAG,
+            "getIncrementalUpdates: Fetching incremental updates since $lastFetched for clusters = $recommendedClusters"
+        )
         return try {
-            userCollection
+            val users = userCollection
                 .whereIn("cluster", recommendedClusters)
                 .whereGreaterThan("lastUpdated", lastFetched)
                 .limit(60)
@@ -53,8 +73,11 @@ class RemoteUserRepository {
                 .await()
                 .toObjects(User::class.java)
                 .map { user -> user.copy(lastUpdated = System.currentTimeMillis()) }
+
+            Log.d(TAG, "getIncrementalUpdates: Retrieved ${users.size} updated users")
+            users
         } catch (e: Exception) {
-            Log.e(TAG, "Error fetching incremental updates: ${e.message}")
+            Log.e(TAG, "getIncrementalUpdates: Error fetching incremental updates: ${e.message}", e)
             emptyList()
         }
     }

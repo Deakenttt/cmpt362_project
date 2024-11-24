@@ -69,4 +69,10 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
             }
         }
     }
+    /**
+     * get the matches users
+     */
+    fun getLikedUsers() {
+        return
+    }
 }
