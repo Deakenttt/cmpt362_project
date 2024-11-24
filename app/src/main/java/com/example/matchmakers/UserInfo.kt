@@ -9,3 +9,10 @@ data class UserInfo(
 
 
 )
+
+data class ProfileInfo(
+    val name: String = "",
+    val age: Int = 0,
+    val interest: String = "", // Change to multiple interests later
+    val biography: String = ""
+)
