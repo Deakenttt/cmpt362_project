@@ -106,6 +106,9 @@
         <activity
             android:name=".ui.report.ReportActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.profile.EditInterestsActivity"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

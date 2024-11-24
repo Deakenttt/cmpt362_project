@@ -98,12 +98,14 @@ class ProfileViewModel: ViewModel() {
         downloadBytes(path, false)
     }
 
-    fun getProfile(uid: String){
+    fun loadOtherProfile(uid: String){
         db.collection("profileinfo").document(uid).get().addOnSuccessListener{
             val name = it.getString("name") ?: "Unknown User"
             val age = it.getLong("age")?.toInt() ?: 0
+            val interests = it.get("interests") as List<String>
             val biography = it.getString("biography") ?: ""
-            currentProfile.value = ProfileInfo(name, age, interest = "", biography)
+
+            otherProfile.value = ProfileInfo(name, age, interests, biography)
         }.addOnFailureListener{error -> println(error)}
     }
 
@@ -112,9 +114,11 @@ class ProfileViewModel: ViewModel() {
         db.collection("profileinfo").document(user.uid).get().addOnSuccessListener{
             val name = it.getString("name") ?: "Unknown User"
             val age = it.getLong("age")?.toInt() ?: 0
+            val interests = it.get("interests") as List<String>
             val biography = it.getString("biography") ?: ""
-            callback(ProfileInfo(name, age, interest = "", biography))
-            currentProfile.value = ProfileInfo(name, age, interest = "", biography)
+
+            callback(ProfileInfo(name, age, interests, biography))
+            currentProfile.value = ProfileInfo(name, age, interests, biography)
         }.addOnFailureListener{error -> println(error)}
     }
 
@@ -124,7 +128,7 @@ class ProfileViewModel: ViewModel() {
         val profileMap = hashMapOf(
             "name" to profile.name,
             "age" to profile.age,
-            "interest" to profile.interest,
+            "interests" to profile.interests,
             "biography" to profile.biography
         )
         db.collection("profileinfo").document(user.uid).set(profileMap).addOnSuccessListener{

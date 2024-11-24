@@ -11,8 +11,8 @@ data class UserInfo(
 )
 
 data class ProfileInfo(
-    val name: String = "",
-    val age: Int = 0,
-    val interest: String = "", // Change to multiple interests later
-    val biography: String = ""
+    var name: String = "",
+    var age: Int = 0,
+    var interests: List<String> = listOf(), // Change to multiple interests later
+    var biography: String = ""
 )

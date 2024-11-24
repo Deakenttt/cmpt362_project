@@ -42,8 +42,9 @@ class CreateAccountViewModel : ViewModel() {
 
             val profileInfo = hashMapOf(
                 "name" to name,
-                "interest" to interest,
-                "age" to age
+                "age" to age,
+                "interests" to listOf(interest),
+                "biography" to ""
             )
 
             // Update profileinfo collection to store all insensitive user data
