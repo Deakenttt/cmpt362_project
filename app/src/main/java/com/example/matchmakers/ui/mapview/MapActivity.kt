@@ -125,7 +125,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
-    // Determine if the user is nearby, defined as within a radius of 1 kilometer
+    // Determine if the user is nearby, defined as within a radius of 5 kilometer
     private fun isNearby(currentUserLocation: LatLng, otherUserLocation: LatLng): Boolean {
         val results = FloatArray(1)
         android.location.Location.distanceBetween(
@@ -133,7 +133,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             otherUserLocation.latitude, otherUserLocation.longitude,
             results
         )
-        return results[0] < 1000 // Within 1 kilometer
+        return results[0] < 5000 // Within 5 kilometer
     }
 
     override fun onDestroy() {

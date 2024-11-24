@@ -47,15 +47,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content">
                     <ImageView
+                        android:id="@+id/other_avatar_image"
                         android:layout_width="100dp"
                         android:layout_height="100dp"
+                        android:scaleType="fitCenter"
                         android:layout_gravity="center"
-                        android:background="#000000" />
+                        android:background="#0024d6ff" />
                 </FrameLayout>
 
                 <androidx.core.widget.NestedScrollView
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
+                    android:layout_marginStart="12dp"
                     android:layout_weight="1">
                     <TextView
                         android:id="@+id/text_biography"

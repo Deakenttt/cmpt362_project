@@ -9,3 +9,10 @@ data class UserInfo(
 
 
 )
+
+data class ProfileInfo(
+    var name: String = "",
+    var age: Int = 0,
+    var interests: List<String> = listOf(), // Change to multiple interests later
+    var biography: String = ""
+)

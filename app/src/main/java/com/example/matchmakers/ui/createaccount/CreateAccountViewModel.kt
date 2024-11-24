@@ -39,6 +39,18 @@ class CreateAccountViewModel : ViewModel() {
                 .addOnFailureListener {
                     _accountCreated.value = false
                 }
+
+            val profileInfo = hashMapOf(
+                "name" to name,
+                "age" to age,
+                "interests" to listOf(interest),
+                "biography" to ""
+            )
+
+            // Update profileinfo collection to store all insensitive user data
+            db.collection("profileinfo").document(uid)
+                .set(profileInfo)
+
         } else {
             _accountCreated.value = false
         }

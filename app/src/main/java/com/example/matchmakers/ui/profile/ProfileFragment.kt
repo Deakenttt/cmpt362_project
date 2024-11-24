@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.MediaStore
@@ -11,8 +12,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.GridView
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
@@ -24,12 +27,19 @@ import com.example.matchmakers.R
 import com.example.matchmakers.databinding.FragmentProfileBinding
 import com.example.matchmakers.ui.auth.LoginActivity
 import java.io.File
+import java.io.Serializable
+import kotlin.collections.List
 
 class ProfileFragment: Fragment() {
     private lateinit var sharedPref: SharedPreferences
     private lateinit var logoutButton: Button
     private lateinit var editAvatarButton: Button
+    private lateinit var editInterestsButton: Button
     private lateinit var avatarImage: ImageView
+    private lateinit var nameInput: EditText
+    private lateinit var ageInput: EditText
+    private lateinit var biographyInput: EditText
+    private lateinit var saveButton: Button
 
     private var interestsArray = ArrayList<String>()
     private lateinit var interestsList: GridView
@@ -40,6 +50,11 @@ class ProfileFragment: Fragment() {
     private lateinit var tempImgUri: Uri
     private lateinit var cameraResult: ActivityResultLauncher<Intent>
     private lateinit var galleryResult: ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var interestsResult: ActivityResultLauncher<Intent>
+    private lateinit var profileViewModel: ProfileViewModel
+
+    private var loaded = false
+    private val LOADED_KEY = "loaded"
 
     private var _binding: FragmentProfileBinding? = null
 
@@ -52,8 +67,7 @@ class ProfileFragment: Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val profileViewModel =
-            ViewModelProvider(this)[ProfileViewModel::class.java]
+        profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
         _binding = FragmentProfileBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -68,7 +82,12 @@ class ProfileFragment: Fragment() {
 
         logoutButton = root.findViewById(R.id.logout_button)
         editAvatarButton = root.findViewById(R.id.edit_avatar)
+        editInterestsButton = root.findViewById(R.id.edit_interests)
         avatarImage = root.findViewById(R.id.avatar_image)
+        nameInput = root.findViewById(R.id.profile_name)
+        ageInput = root.findViewById(R.id.profile_age)
+        biographyInput = root.findViewById(R.id.profile_biography)
+        saveButton = root.findViewById(R.id.save_profile)
 
         logoutButton.setOnClickListener{
             with (sharedPref.edit()){
@@ -87,7 +106,7 @@ class ProfileFragment: Fragment() {
             editDialog.show(context.supportFragmentManager, "")
         }
 
-        interestsArray = arrayListOf("Interest 1", "Interest 2", "Interest 3", "Interest 4", "Interest 5")
+        interestsArray = arrayListOf()
         interestsList = root.findViewById(R.id.profile_interests)
         adapter = InterestsAdapter(context, interestsArray)
         interestsList.adapter = adapter
@@ -110,7 +129,57 @@ class ProfileFragment: Fragment() {
                 profileViewModel.replaceAvatar(context, bitmap)
             }
         }
+        interestsResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            result: ActivityResult ->
+            if (result.resultCode == Activity.RESULT_OK){
+                val interests = if (Build.VERSION.SDK_INT >= 33){
+                    result.data?.getSerializableExtra("interests", Serializable::class.java) as List<String>
+                } else{
+                    result.data?.getSerializableExtra("interests") as List<String>
+                }
 
+                profileViewModel.currentProfile.value?.interests = interests
+                interestsArray.clear()
+                interestsArray.addAll(interests)
+                adapter.notifyDataSetChanged()
+
+                saveProfile()
+
+                loaded = true
+            }
+        }
+
+        editInterestsButton.setOnClickListener{
+            val intent = Intent(context, EditInterestsActivity::class.java)
+            intent.putExtra(EditInterestsActivity.INTERESTS_KEY, interestsArray.toList() as Serializable)
+            interestsResult.launch(intent)
+        }
+
+        saveButton.setOnClickListener{
+            saveProfile()
+        }
+
+        if (savedInstanceState != null){
+            loaded = savedInstanceState.getBoolean(LOADED_KEY)
+        }
+        if (!loaded){
+            println("Loading profile")
+            profileViewModel.loadProfile{
+                nameInput.setText(it.name)
+                ageInput.setText(it.age.toString())
+                biographyInput.setText(it.biography)
+
+                interestsArray.clear()
+                interestsArray.addAll(it.interests)
+                adapter.notifyDataSetChanged()
+            }
+        }
+        val savedInterests = profileViewModel.currentProfile.value?.interests
+        if (savedInterests != null){
+            interestsArray.clear()
+            interestsArray.addAll(savedInterests)
+            adapter.notifyDataSetChanged()
+        }
         profileViewModel.avatar.observe(viewLifecycleOwner){
             bitmap -> avatarImage.setImageBitmap(bitmap)
         }
@@ -123,6 +192,26 @@ class ProfileFragment: Fragment() {
         _binding = null
     }
 
+    private fun saveProfile(){
+        val name = nameInput.text.toString()
+        val age = ageInput.text.toString().toIntOrNull()
+        val biography = biographyInput.text.toString()
+
+        nameInput.clearFocus()
+        ageInput.clearFocus()
+        biographyInput.clearFocus()
+
+        val profile = profileViewModel.currentProfile.value
+        if (profile != null){
+            profileViewModel.currentProfile.value?.name = name
+            profileViewModel.currentProfile.value?.age = age ?: 0
+            profileViewModel.currentProfile.value?.biography = biography
+            profileViewModel.saveProfile()
+
+            Toast.makeText(context, "Profile Saved", Toast.LENGTH_SHORT).show()
+        }
+    }
+
     fun startUseCamera(){
         val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         intent.putExtra(MediaStore.EXTRA_OUTPUT, tempImgUri)
@@ -133,5 +222,10 @@ class ProfileFragment: Fragment() {
     fun startUseGallery(){
         galleryResult.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
         editDialog.dismiss()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putBoolean(LOADED_KEY, loaded)
     }
 }

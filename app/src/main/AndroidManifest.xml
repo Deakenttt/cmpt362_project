@@ -98,7 +98,7 @@
             android:name=".network.ClusterApiService"
             android:exported="false" />
         <activity
-            android:name=".ui.CreateAccount.CreateAccount"
+            android:name=".ui.createaccount.CreateAccount"
             android:exported="false" />
         <activity
             android:name=".ui.auth.RegisterActivity"
@@ -123,6 +123,9 @@
             android:exported="false" />
         <activity
             android:name=".ui.report.ReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.EditInterestsActivity"
             android:exported="false" />
 
         <provider

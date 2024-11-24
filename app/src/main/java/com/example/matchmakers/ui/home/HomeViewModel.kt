@@ -13,6 +13,7 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
     // Exposing the currently displayed user from UserViewModel
     val currentRecommendedUser: LiveData<User?> get() = userViewModel.currentUser
 
+
     // Holds error messages for the UI
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
