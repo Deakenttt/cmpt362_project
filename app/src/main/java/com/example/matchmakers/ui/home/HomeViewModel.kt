@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 
 class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
 
+    private val likedUsers = MutableLiveData<List<User>>()
     private val userCache = RecommendedUserCache() // Local cache for recommended users
     private val _currentRecommendedUser = MutableLiveData<User?>() // Holds the currently displayed recommended user
     val currentRecommendedUser: LiveData<User?> get() = _currentRecommendedUser
@@ -86,5 +87,12 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
                 _errorMessage.value = "Failed to refresh recommended users: ${e.localizedMessage}"
             }
         }
+    }
+
+    /**
+     * Get liked users to display in MatchListFragment.
+     */
+    fun getLikedUsers(): LiveData<List<User>> {
+        return likedUsers
     }
 }
