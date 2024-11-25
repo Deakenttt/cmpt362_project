@@ -5,6 +5,7 @@ import com.example.matchmakers.model.User
 import com.example.matchmakers.repository.LocalUserRepository
 import com.example.matchmakers.repository.RemoteUserRepository
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 
 class UserService(
     private val localUserRepository: LocalUserRepository,
@@ -29,14 +30,15 @@ class UserService(
     private suspend fun refreshCacheIfNeeded() {
         val lastFetched = localUserRepository.getLastFetchedTimestamp() ?: 0L
         val currentTime = System.currentTimeMillis()
-
+        // DK comment for testing without cache data (without cache vaild)
         // if the last fetch date is 30 min after the current time, we do conditional updating the cache
-        if (!isCacheValid(lastFetched, currentTime)) {
-            Log.d(TAG, "Cache is invalid. Fetching fresh data from remote...")
-            fetchAndCacheRecommendedUsers(currentTime)
-        } else {
-            Log.d(TAG, "Cache is valid. No need to fetch from remote.")
-        }
+//        if (!isCacheValid(lastFetched, currentTime)) {
+//            Log.d(TAG, "Cache is invalid. Fetching fresh data from remote...")
+//            fetchAndCacheRecommendedUsers(currentTime)
+//        } else {
+//            Log.d(TAG, "Cache is valid. No need to fetch from remote.")
+//        }
+        fetchAndCacheRecommendedUsers(currentTime)
     }
 
     /**
@@ -80,7 +82,7 @@ class UserService(
      */
     private suspend fun fetchIncrementalUpdates(recommendedClusters: List<Int>): List<User> {
         val lastFetched = localUserRepository.getLastFetchedTimestamp() ?: 0L
-        //DK commend (missing timestamp)
+        //DK commend (missing timestamp for testing)
 //        return remoteUserRepository.getIncrementalUpdates(lastFetched, recommendedClusters)
         return remoteUserRepository.getRecommendedUsers(recommendedClusters)
     }
@@ -92,9 +94,23 @@ class UserService(
         // Clear the existing cache and insert the new data
         localUserRepository.deleteAllRecommendedUsers()
         localUserRepository.insertRecommendedUsers(users)
+        // Log the current cache size to ensure data consistency
+        logCacheData()
 
         // Update the last fetched timestamp
         localUserRepository.updateLastFetchedTimestampForAll(currentTime)
         Log.d(TAG, "Local cache updated with ${users.size} users.")
+    }
+
+    /**
+     * Logs the current size of the local cache for debugging purposes.
+     */
+    private suspend fun logCacheData() {
+        val cachedUsers = localUserRepository.getAllRecommendedUsers().firstOrNull()
+        val cacheSize = cachedUsers?.size ?: 0
+        Log.d(TAG, "Current cache size: $cacheSize")
+        cachedUsers?.forEach { user ->
+            Log.d(TAG, "Cached user: ID = ${user.id}, Name = ${user.name}, Cluster = ${user.cluster}")
+        }
     }
 }

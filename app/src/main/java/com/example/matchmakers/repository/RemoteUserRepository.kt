@@ -41,12 +41,15 @@ class RemoteUserRepository {
     suspend fun getRecommendedUsers(recommendedClusters: List<Int>): List<User> {
         Log.d(TAG, "getRecommendedUsers: Fetching users for clusters = $recommendedClusters")
         return try {
-            val users = userCollection.whereIn("cluster", recommendedClusters)
+            val querySnapshot = userCollection.whereIn("cluster", recommendedClusters)
                 .limit(60)
                 .get()
                 .await()
-                .toObjects(User::class.java)
-                .map { user -> user.copy(lastUpdated = System.currentTimeMillis()) }
+
+            val users = querySnapshot.documents.map { document ->
+                val user = document.toObject(User::class.java)
+                user?.copy(id = document.id, lastUpdated = System.currentTimeMillis()) // Assign the document ID to the `id` field
+            }.filterNotNull() // Filter out any null users
 
             Log.d(TAG, "getRecommendedUsers: Retrieved ${users.size} users")
             users

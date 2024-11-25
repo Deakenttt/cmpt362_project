@@ -1,5 +1,6 @@
 package com.example.matchmakers
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
@@ -10,11 +11,14 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.matchmakers.network.RetrofitInstance
 import com.example.matchmakers.databinding.ActivityMainBinding
 import com.example.matchmakers.maplogic.LocationPermissionHelper
 import com.example.matchmakers.maplogic.LocationService
 import com.example.matchmakers.ui.auth.LoginActivity
+import com.example.matchmakers.worker.UserSyncWorker
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,6 +31,9 @@ class  MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Manually trigger the worker for testing
+        triggerUserSyncWorker(this)
 
         // Check if the user is logged in
         if (auth.currentUser == null) {
@@ -99,5 +106,15 @@ class  MainActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    // DK manually trigger the worker for update cache
+    fun triggerUserSyncWorker(context: Context) {
+        // Build the OneTimeWorkRequest
+        val workRequest = OneTimeWorkRequest.Builder(UserSyncWorker::class.java)
+            .build()
+
+        // Enqueue the work request
+        WorkManager.getInstance(context).enqueue(workRequest)
     }
 }

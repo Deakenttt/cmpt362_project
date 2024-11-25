@@ -7,26 +7,19 @@ import com.google.firebase.firestore.PropertyName
 @Entity(tableName = "user_table")
 data class User(
     @PrimaryKey
-    @PropertyName("id") // Maps Firebase field "id" to Room's `id`
-    val id: String = "",
+    val id: String = "", // Document ID from Firebase
 
-    @PropertyName("name") // Maps Firebase field "name"
-    val name: String = "",
+    val name: String = "", // User's name
 
-    @PropertyName("age") // Maps Firebase field "age"
-    val age: Int = 0,
+    val age: Int = 0, // User's age
 
-    @PropertyName("interest") // Maps Firebase field "interest"
-    val interest: String = "",
+    val interest: String = "", // User's interest(s)
 
-    @PropertyName("lastMessage") // Maps Firebase field "lastMessage"
-    val lastMessage: String = "",
+    val lastMessage: String = "", // Placeholder for the last message
 
-    @PropertyName("conversationId") // Maps Firebase field "conversationId"
-    val conversationId: String = "",
+    val conversationId: String = "", // Conversation ID related to the user
 
-    @PropertyName("cluster") // Maps Firebase field "cluster" for user recommendation
-    val cluster: Int = 0,
+    val cluster: Int = 0, // Cluster ID for recommendations
 
     // Timestamp of when the user was last updated in Firebase
     val lastUpdated: Long = 0L,
@@ -34,3 +27,4 @@ data class User(
     // Room-only field to track when the user data was last fetched
     val lastFetched: Long = System.currentTimeMillis()
 )
+

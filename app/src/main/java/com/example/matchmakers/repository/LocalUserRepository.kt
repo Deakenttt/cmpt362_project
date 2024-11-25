@@ -4,11 +4,23 @@ import android.util.Log
 import com.example.actiontabskotlin.database.UserDao
 import com.example.matchmakers.model.User
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
 class LocalUserRepository(private val userDao: UserDao) {
 
     private val TAG = "LocalUserRepository"
+
+    /**
+     * Logs the current cache size.
+     */
+    fun logCacheSize() {
+        runBlocking {
+            val users = userDao.getAllRecommendedUsers().first()
+            Log.d(TAG, "logCacheSize: Current cache size = ${users.size}")
+        }
+    }
 
     /**
      * Fetches all recommended users from the cache.
