@@ -106,10 +106,13 @@ class ProfileViewModel: ViewModel() {
         db.collection("profileinfo").document(uid).get().addOnSuccessListener{
             val name = it.getString("name") ?: "Unknown User"
             val age = it.getLong("age")?.toInt() ?: 0
-            val interests = it.get("interests") as List<String>
+            val gender = it.getString("gender") ?: ""
+            val interest1 = it.getString("interest1") ?: ""
+            val interest2 = it.getString("interest2") ?: ""
+            val interest3 = it.getString("interest3") ?: ""
             val biography = it.getString("biography") ?: ""
 
-            otherProfile.value = ProfileInfo(name, age, interests, biography)
+            otherProfile.value = ProfileInfo(name, age, gender, interest1, interest2, interest3, biography)
         }.addOnFailureListener{error -> println(error)}
     }
 
@@ -118,22 +121,33 @@ class ProfileViewModel: ViewModel() {
         db.collection("profileinfo").document(user.uid).get().addOnSuccessListener{
             val name = it.getString("name") ?: "Unknown User"
             val age = it.getLong("age")?.toInt() ?: 0
-            val interests = it.get("interests") as List<String>
+            val gender = it.getString("gender") ?: ""
+            val interest1 = it.getString("interest1") ?: ""
+            val interest2 = it.getString("interest2") ?: ""
+            val interest3 = it.getString("interest3") ?: ""
             val biography = it.getString("biography") ?: ""
 
-            callback(ProfileInfo(name, age, interests, biography))
-            currentProfile.value = ProfileInfo(name, age, interests, biography)
+            val profile = ProfileInfo(name, age, gender, interest1, interest2, interest3, biography)
+            callback(profile)
+            currentProfile.value = profile
         }.addOnFailureListener{error -> println(error)}
     }
 
     fun saveProfile(){
         val user = auth.currentUser ?: return
         val profile = currentProfile.value ?: return
+        val calendar = Calendar.getInstance()
+        val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
+
         val profileMap = hashMapOf(
             "name" to profile.name,
             "age" to profile.age,
-            "interests" to profile.interests,
-            "biography" to profile.biography
+            "gender" to profile.gender,
+            "interest1" to profile.interest1,
+            "interest2" to profile.interest2,
+            "interest3" to profile.interest3,
+            "biography" to profile.biography,
+            "timestamp" to timestamp
         )
         db.collection("profileinfo").document(user.uid).set(profileMap).addOnSuccessListener{
             println("Updated profile")
@@ -141,12 +155,10 @@ class ProfileViewModel: ViewModel() {
             println("Could not update profile: $error")
         }
 
-        val calendar = Calendar.getInstance()
-        val timestamp = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.time)
-        db.collection("users").document(user.uid).update("timestamp", timestamp).addOnSuccessListener {
-            println("updated timestamp")
-        }.addOnFailureListener{ error->
-            println("Could not update timestamp: $error")
-        }
+//        db.collection("users").document(user.uid).update("timestamp", timestamp).addOnSuccessListener {
+//            println("updated timestamp")
+//        }.addOnFailureListener{ error->
+//            println("Could not update timestamp: $error")
+//        }
     }
 }

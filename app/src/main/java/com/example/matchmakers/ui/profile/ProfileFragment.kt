@@ -138,7 +138,10 @@ class ProfileFragment: Fragment() {
                     result.data?.getSerializableExtra("interests") as List<String>
                 }
 
-                profileViewModel.currentProfile.value?.interests = interests
+                profileViewModel.currentProfile.value?.interest1 = if (interests.size >= 1) interests[0] else ""
+                profileViewModel.currentProfile.value?.interest2 = if (interests.size >= 2) interests[1] else ""
+                profileViewModel.currentProfile.value?.interest3 = if (interests.size >= 3) interests[2] else ""
+
                 interestsArray.clear()
                 interestsArray.addAll(interests)
                 adapter.notifyDataSetChanged()
@@ -170,16 +173,31 @@ class ProfileFragment: Fragment() {
                 biographyInput.setText(it.biography)
 
                 interestsArray.clear()
-                interestsArray.addAll(it.interests)
+                interestsArray.add(it.interest1)
+                interestsArray.add(it.interest2)
+                interestsArray.add(it.interest3)
+                interestsArray.removeIf{b -> b == ""}
                 adapter.notifyDataSetChanged()
             }
         }
-        val savedInterests = profileViewModel.currentProfile.value?.interests
-        if (savedInterests != null){
+        val savedInterests = arrayListOf(
+            profileViewModel.currentProfile.value?.interest1,
+            profileViewModel.currentProfile.value?.interest2,
+            profileViewModel.currentProfile.value?.interest3
+        )
+        println(savedInterests)
+        savedInterests.removeIf{b -> b == "" || b == null}
+        if (savedInterests.size > 0){
             interestsArray.clear()
-            interestsArray.addAll(savedInterests)
+            for (i in savedInterests.indices){
+                if (savedInterests[i] != null){
+                    savedInterests[i]?.let { interestsArray.add(it) }
+                }
+            }
             adapter.notifyDataSetChanged()
         }
+
+
         profileViewModel.avatar.observe(viewLifecycleOwner){
             bitmap -> avatarImage.setImageBitmap(bitmap)
         }
