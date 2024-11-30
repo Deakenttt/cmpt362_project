@@ -17,6 +17,7 @@ data class ProfileInfo(
     var interest1: String = "",
     var interest2: String = "",
     var interest3: String = "",
+    var images: List<String> = listOf(),
     var biography: String = "",
     var timestamp: String = ""
 )

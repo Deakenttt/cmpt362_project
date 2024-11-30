@@ -53,6 +53,7 @@ class CreateAccountViewModel : ViewModel() {
                 "interest1" to interest,
                 "interest2" to "",
                 "interest3" to "",
+                "images" to listOf<String>(),
                 "biography" to "",
                 "timestamp" to timestamp
             )

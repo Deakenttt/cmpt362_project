@@ -35,6 +35,7 @@ class ProfileFragment: Fragment() {
     private lateinit var logoutButton: Button
     private lateinit var editAvatarButton: Button
     private lateinit var editInterestsButton: Button
+    private lateinit var openGalleryButton: Button
     private lateinit var avatarImage: ImageView
     private lateinit var nameInput: EditText
     private lateinit var ageInput: EditText
@@ -83,6 +84,7 @@ class ProfileFragment: Fragment() {
         logoutButton = root.findViewById(R.id.logout_button)
         editAvatarButton = root.findViewById(R.id.edit_avatar)
         editInterestsButton = root.findViewById(R.id.edit_interests)
+        openGalleryButton = root.findViewById(R.id.open_gallery)
         avatarImage = root.findViewById(R.id.avatar_image)
         nameInput = root.findViewById(R.id.profile_name)
         ageInput = root.findViewById(R.id.profile_age)
@@ -101,7 +103,7 @@ class ProfileFragment: Fragment() {
         }
         editAvatarButton.setOnClickListener{
             val bundle = Bundle()
-            bundle.putString(EditAvatarDialog.DIALOG_NAME, "Choose Photo")
+            bundle.putString(EditAvatarDialog.DIALOG_NAME, "Choose Avatar")
             editDialog.arguments = bundle
             editDialog.show(context.supportFragmentManager, "")
         }
@@ -157,6 +159,10 @@ class ProfileFragment: Fragment() {
             intent.putExtra(EditInterestsActivity.INTERESTS_KEY, interestsArray.toList() as Serializable)
             interestsResult.launch(intent)
         }
+        openGalleryButton.setOnClickListener{
+            val intent = Intent(context, GalleryActivity::class.java)
+            startActivity(intent)
+        }
 
         saveButton.setOnClickListener{
             saveProfile()
@@ -198,6 +204,7 @@ class ProfileFragment: Fragment() {
         }
 
 
+        profileViewModel.loadAvatar()
         profileViewModel.avatar.observe(viewLifecycleOwner){
             bitmap -> avatarImage.setImageBitmap(bitmap)
         }
