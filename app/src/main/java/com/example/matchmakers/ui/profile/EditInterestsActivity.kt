@@ -77,7 +77,8 @@ class EditInterestsActivity: AppCompatActivity(), OnItemSelectedListener {
         if (position == 0) return
         options.setSelection(0)
         val interest = interestChoices[position]
-        if (!newInterests.contains(interest)){
+        // The user can add up to a maximum of 3 interests
+        if (!newInterests.contains(interest) && newInterests.size < 3){
             newInterests.add(interest)
             interestsAdapter.notifyDataSetChanged()
         }

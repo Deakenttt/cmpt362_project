@@ -13,6 +13,11 @@ data class UserInfo(
 data class ProfileInfo(
     var name: String = "",
     var age: Int = 0,
-    var interests: List<String> = listOf(), // Change to multiple interests later
-    var biography: String = ""
+    var gender: String = "",
+    var interest1: String = "",
+    var interest2: String = "",
+    var interest3: String = "",
+    var images: List<String> = listOf(),
+    var biography: String = "",
+    var timestamp: String = ""
 )

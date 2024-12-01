@@ -11,6 +11,7 @@ import androidx.fragment.app.DialogFragment
 
 class EditAvatarDialog: DialogFragment() {
     var profileFragment: ProfileFragment? = null
+    var galleryActivity: GalleryActivity? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val bundle = arguments
@@ -26,14 +27,23 @@ class EditAvatarDialog: DialogFragment() {
         val useGallery = view.findViewById<Button>(R.id.edit_gallery)
 
         val fragment = profileFragment
-        if (fragment != null){
-            useCamera.setOnClickListener{
-                fragment.startUseCamera()
-            }
-            useGallery.setOnClickListener{
-                fragment.startUseGallery()
-            }
+        val activity = galleryActivity
+        useCamera.setOnClickListener{
+            fragment?.startUseCamera()
+            activity?.startUseCamera()
         }
+        useGallery.setOnClickListener{
+            fragment?.startUseGallery()
+            activity?.startUseGallery()
+        }
+//        if (fragment != null){
+//            useCamera.setOnClickListener{
+//                fragment.startUseCamera()
+//            }
+//            useGallery.setOnClickListener{
+//                fragment.startUseGallery()
+//            }
+//        }
 
         builder.setView(view)
 

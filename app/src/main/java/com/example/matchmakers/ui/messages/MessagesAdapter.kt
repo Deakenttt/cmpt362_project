@@ -33,6 +33,8 @@ class MessagesAdapter(private val context: Context, private var entries: List<Us
         val age = view.findViewById<TextView>(R.id.messages_age)
         val lastMessage = view.findViewById<TextView>(R.id.messages_lastMessage)
 
+        println("mgs: last message in adapter: ${entries[position].lastMessage}")
+
         val data = entries[position]
 
         username.text = data.name

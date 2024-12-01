@@ -17,7 +17,7 @@ class MessagesViewModel : ViewModel() {
     private val _conversationIds = MutableLiveData<List<String>>()
     val conversationIds: LiveData<List<String>> get() = _conversationIds
 
-    private val _lastMessage = MutableLiveData<Map<String, String>>() // ConversationId -> LastMessage
+    private val _lastMessage = MutableLiveData<Map<String, String>>()
     val lastMessage: LiveData<Map<String, String>> get() = _lastMessage
 
     private val _usersList = MutableLiveData<List<User>>()
@@ -66,6 +66,7 @@ class MessagesViewModel : ViewModel() {
 
         _conversationIds.value = conversationIdsList
         _lastMessage.value = lastMessageMap
+        println("mgs: last message value in viewmodel = ${_lastMessage.value}")
     }
 
     private fun getLastMessageText(document: DocumentSnapshot): String {
@@ -80,12 +81,12 @@ class MessagesViewModel : ViewModel() {
         conversationId: String
     ) {
         val otherUserUid = participants.firstOrNull { it != currentUid } ?: return
-        println("mgs: OtherUserUid: $otherUserUid")
 
         db.collection("profileinfo").document(otherUserUid)
             .get()
             .addOnSuccessListener { userDoc ->
-                val user = createUserFromDocument(userDoc, otherUserUid, conversationId)
+                val lastMessageText = _lastMessage.value?.get(conversationId) ?: ""
+                val user = createUserFromDocument(userDoc, otherUserUid, conversationId, lastMessageText)
                 synchronized(usersList) {
                     usersList.add(user)
                 }
@@ -93,6 +94,9 @@ class MessagesViewModel : ViewModel() {
                 if (usersList.size == _conversationIds.value?.size) {
                     _usersList.value = usersList
                 }
+
+                println("mgs: userList: $usersList")
+
             }
             .addOnFailureListener { exception ->
                 println("mgs: Error fetching user data: $exception")
@@ -102,13 +106,14 @@ class MessagesViewModel : ViewModel() {
     private fun createUserFromDocument(
         userDoc: DocumentSnapshot,
         otherUserUid: String,
-        conversationId: String
+        conversationId: String,
+        lastMessageText: String
     ): User {
         val userName = userDoc.getString("name") ?: "Unknown User"
         val age = userDoc.getLong("age")?.toInt() ?: 0
         val interest = userDoc.getString("interest") ?: "Unknown interest"
 
-        return User(otherUserUid, userName, age, interest, "", conversationId)
+        return User(otherUserUid, userName, age, interest, lastMessageText, conversationId)
     }
 }
 

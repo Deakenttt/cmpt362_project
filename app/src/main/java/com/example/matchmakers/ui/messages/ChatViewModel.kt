@@ -49,7 +49,6 @@ class ChatViewModel : ViewModel() {
 
 
     private fun mapToChatMessage(map: Map<String, Any>): ChatMessage? {
-        println("mgs: Map contents: $map ")
         return try {
             ChatMessage(
                 attachments = map["attachments"] as? String ?: "",

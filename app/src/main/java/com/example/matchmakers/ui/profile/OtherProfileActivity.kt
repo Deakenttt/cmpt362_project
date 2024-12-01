@@ -75,7 +75,10 @@ class OtherProfileActivity: AppCompatActivity() {
             biographyText.text = it.biography
 
             interestsArray.clear()
-            interestsArray.addAll(it.interests)
+            interestsArray.add(it.interest1)
+            interestsArray.add(it.interest2)
+            interestsArray.add(it.interest3)
+            interestsArray.removeIf{b -> b == ""}
             adapter.notifyDataSetChanged()
         }
 

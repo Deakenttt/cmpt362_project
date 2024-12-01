@@ -90,14 +90,23 @@
         <GridView
             android:id="@+id/profile_interests"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:numColumns="4" />
+            android:layout_height="wrap_content"
+            android:numColumns="3" />
 
         <Button
             android:id="@+id/edit_interests"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
             android:text="Edit Interests"/>
+
+
+        <Button
+            android:id="@+id/open_gallery"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:text="Open Gallery"/>
 
 
         <Button
