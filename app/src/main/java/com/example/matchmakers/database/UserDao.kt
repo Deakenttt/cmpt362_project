@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Delete
+import androidx.room.Transaction
 import com.example.matchmakers.model.User
 import kotlinx.coroutines.flow.Flow
 
@@ -42,4 +43,12 @@ interface UserDao {
     // 8. Update `lastFetched` timestamp for all users after a refresh
     @Query("UPDATE user_table SET lastFetched = :timestamp")
     suspend fun updateLastFetchedTimestampForAll(timestamp: Long)
+
+    // 9. Perform an atomic cache update
+    @Transaction
+    suspend fun updateCache(users: List<User>, timestamp: Long) {
+        deleteAllRecommendedUsers() // Step 1: Clear the cache
+        insertRecommendedUsers(users) // Step 2: Insert new users
+        updateLastFetchedTimestampForAll(timestamp) // Step 3: Update timestamps
+    }
 }

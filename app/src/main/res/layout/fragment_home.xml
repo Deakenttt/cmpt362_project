@@ -35,7 +35,7 @@
                     android:id="@+id/username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="User Name"
+                    android:text="Looking for User..."
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:paddingTop="8dp" />
@@ -44,14 +44,14 @@
                     android:id="@+id/user_age"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Age: 25"
+                    android:text=""
                     android:paddingTop="4dp" />
 
                 <TextView
                     android:id="@+id/user_interest_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Interests: Hiking, Traveling"
+                    android:text=""
                     android:paddingTop="4dp" />
 
                 <LinearLayout

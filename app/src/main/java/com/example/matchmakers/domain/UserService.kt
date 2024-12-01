@@ -90,17 +90,48 @@ class UserService(
     /**
      * Updates the local cache with the fetched users and updates the last fetched timestamp.
      */
-    private suspend fun updateLocalCache(users: List<User>, currentTime: Long) {
-        // Clear the existing cache and insert the new data
-        localUserRepository.deleteAllRecommendedUsers()
-        localUserRepository.insertRecommendedUsers(users)
-        // Log the current cache size to ensure data consistency
-        logCacheData()
+//    private suspend fun updateLocalCache(users: List<User>, currentTime: Long) {
+//        // Clear the existing cache and insert the new data
+//        localUserRepository.deleteAllRecommendedUsers()
+//        localUserRepository.insertRecommendedUsers(users)
+//        // Log the current cache size to ensure data consistency
+//        logCacheData()
+//
+//        // Update the last fetched timestamp
+//        localUserRepository.updateLastFetchedTimestampForAll(currentTime)
+//        Log.d(TAG, "Local cache updated with ${users.size} users.")
+//    }
+//    private suspend fun updateLocalCache(users: List<User>, currentTime: Long) {
+//        if (users.isEmpty()) {
+//            Log.d(TAG, "No new users to update in the local cache.")
+//            return
+//        }
+//
+//        // Perform atomic cache update
+//        Log.d(TAG, "Updating cache atomically: Deleting old users and inserting ${users.size} new users.")
+//        localUserRepository.runInTransaction {
+//            localUserRepository.updateCache(users, currentTime)
+//        }
+//
+//        Log.d(TAG, "Local cache updated with ${users.size} users.")
+//        logCacheData() // Log the current cache state for debugging
+//    }
 
-        // Update the last fetched timestamp
-        localUserRepository.updateLastFetchedTimestampForAll(currentTime)
-        Log.d(TAG, "Local cache updated with ${users.size} users.")
+    private suspend fun updateLocalCache(users: List<User>, currentTime: Long) {
+        if (users.isEmpty()) {
+            Log.d(TAG, "No new users to update in the local cache.")
+            return
+        }
+
+        Log.d(TAG, "Updating cache with ${users.size} users.")
+
+        // Call the updated `updateCache` method with the onUpdateComplete callback
+        localUserRepository.updateCache(users, currentTime, onUpdateComplete = {
+            Log.d(TAG, "Cache update callback invoked. Post-update actions can proceed.")
+//            logCacheData() // Log the current cache state for debugging
+        })
     }
+
 
     /**
      * Logs the current size of the local cache for debugging purposes.

@@ -28,7 +28,19 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
      * Moves to the next user without removing the current one from the cache.
      */
     fun likeUser() {
-        userViewModel.displayNextUser()
+        val currentUser = currentRecommendedUser.value
+        if (currentUser == null) {
+            _errorMessage.value = "No user to like."
+            return
+        }
+        viewModelScope.launch {
+            try {
+                userViewModel.handleLike() // Call UserViewModel's like handler
+                _errorMessage.value = null // Clear any error messages
+            } catch (e: Exception) {
+                _errorMessage.value = "Failed to like user: ${e.localizedMessage}"
+            }
+        }
     }
 
     /**
@@ -36,7 +48,19 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
      * Removes the current user from the cache and displays the next one.
      */
     fun dislikeUser() {
-        userViewModel.deleteCurrentUser()
+        val currentUser = currentRecommendedUser.value
+        if (currentUser == null) {
+            _errorMessage.value = "No user to dislike."
+            return
+        }
+        viewModelScope.launch {
+            try {
+                userViewModel.handleDislike() // Call UserViewModel's dislike handler
+                _errorMessage.value = null // Clear any error messages
+            } catch (e: Exception) {
+                _errorMessage.value = "Failed to dislike user: ${e.localizedMessage}"
+            }
+        }
     }
 
     /**

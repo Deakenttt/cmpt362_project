@@ -13,6 +13,7 @@ import com.example.matchmakers.viewmodel.UserViewModelFactory
 import com.example.matchmakers.model.User
 import com.google.android.material.snackbar.Snackbar
 import com.example.matchmakers.database.UserDatabase
+import com.example.matchmakers.repository.RemoteUserRepository
 
 class HomeFragment : Fragment() {
 
@@ -49,10 +50,11 @@ class HomeFragment : Fragment() {
         val userDao = userDatabase.userDao()
 
         // Initialize UserRepository with UserDao
-        val userRepository = LocalUserRepository(userDao)
+        val localUserRepository = LocalUserRepository(userDao)
+        val remoteUserRepository = RemoteUserRepository()
 
         // Initialize UserViewModel with UserViewModelFactory
-        val userViewModelFactory = UserViewModelFactory(userRepository)
+        val userViewModelFactory = UserViewModelFactory(localUserRepository, remoteUserRepository)
         userViewModel = ViewModelProvider(this, userViewModelFactory)[UserViewModel::class.java]
 
         // Initialize HomeViewModel with HomeViewModelFactory

@@ -2,11 +2,16 @@ package com.example.matchmakers.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.*
+import com.example.matchmakers.domain.UserService
 import com.example.matchmakers.model.User
 import com.example.matchmakers.repository.LocalUserRepository
+import com.example.matchmakers.repository.RemoteUserRepository
 import kotlinx.coroutines.launch
 
-class UserViewModel(private val repository: LocalUserRepository) : ViewModel() {
+class UserViewModel(
+    private val repository: LocalUserRepository,
+    private val remoteRepository: RemoteUserRepository
+) : ViewModel() {
 
     private val TAG = "UserViewModel"
 
@@ -20,11 +25,50 @@ class UserViewModel(private val repository: LocalUserRepository) : ViewModel() {
     // Internal index to keep track of the current user in the list
     private var currentIndex = 0
 
+//    init {
+//        Log.d(TAG, "UserViewModel initialized. Observing recommended users from cache.")
+//        recommendedUsers.observeForever { users ->
+//            if (users.isEmpty()) {
+//                Log.d(TAG, "Recommended users cache is empty. No users to display.")
+//                _currentUser.value = null
+//                currentIndex = 0
+//            } else {
+//                Log.d(TAG, "Recommended users cache contains ${users.size} users.")
+//                currentIndex = 0
+//                _currentUser.value = users.getOrNull(currentIndex)
+//            }
+//        }
+//    }
+
     init {
-        Log.d(TAG, "UserViewModel initialized. Observing recommended users from cache.")
+        Log.d(TAG, "UserViewModel initialized. Forcing cache refresh.")
+
+        // Force a cache refresh before observing LiveData
+        viewModelScope.launch {
+            forceCacheRefresh()
+            observeLiveData()
+        }
+    }
+
+    /**
+     * Force cache refresh before observing LiveData.
+     */
+    private suspend fun forceCacheRefresh() {
+        val userService = UserService(repository, remoteRepository)
+        userService.getRecommendedUsers() // Fetch and update the cache
+        Log.d(TAG, "Cache refresh forced in UserViewModel initialization.")
+    }
+
+    /**
+     * Observe recommended users LiveData and synchronize with cache.
+     */
+    private fun observeLiveData() {
         recommendedUsers.observeForever { users ->
             if (users.isEmpty()) {
-                Log.d(TAG, "Recommended users cache is empty. No users to display.")
+                viewModelScope.launch {
+                    val cacheSize = repository.getCacheSize()
+                    Log.d(TAG, "Recommended users cache is empty. The actual cache size is $cacheSize.")
+                }
                 _currentUser.value = null
                 currentIndex = 0
             } else {
@@ -64,15 +108,15 @@ class UserViewModel(private val repository: LocalUserRepository) : ViewModel() {
                 return
             }
 
-            if (currentIndex < users.size - 1) {
-                // Increment index and display the next user
-                currentIndex++
+            // Move to the next user in the list
+            currentIndex++
+            if (currentIndex < users.size) {
                 _currentUser.value = users[currentIndex]
                 Log.d(TAG, "Displaying next user: ID = ${users[currentIndex].id}, Name = ${users[currentIndex].name}")
             } else {
-                // Stop when the last user is reached
-                Log.d(TAG, "No more users to display. Reached the last user in the cache.")
+                // If we've reached the end, set current user to null
                 _currentUser.value = null
+                Log.d(TAG, "No more users to display. Reached the end of the cache.")
             }
         } ?: run {
             _currentUser.value = null
@@ -121,40 +165,86 @@ class UserViewModel(private val repository: LocalUserRepository) : ViewModel() {
      */
     fun deleteCurrentUser() {
         val userToDelete = _currentUser.value
-        userToDelete?.let {
+        userToDelete?.let { user ->
             viewModelScope.launch {
-                Log.d(TAG, "Deleting user with ID: ${it.id}")
+                Log.d(TAG, "Deleting user with ID: ${user.id}")
 
-                // Delete user from the cache
-                repository.deleteUserById(it.id)
-                Log.d(TAG, "Deleted user with ID: ${it.id}")
+                // Delete the user from the cache (local repository)
+                repository.deleteUserById(user.id)
+                Log.d(TAG, "Deleted user with ID: ${user.id}")
 
-                // Fetch the updated cache after deletion
+                // Check the updated cache
                 val updatedUsers = recommendedUsers.value ?: emptyList()
-                Log.d(TAG, "Recommended users cache contains ${updatedUsers.size} users after deletion.")
-
-                if (updatedUsers.isNotEmpty()) {
-                    // Adjust index to the next user in the list
-                    currentIndex = updatedUsers.indexOfFirst { user -> user.id == it.id }
-                    if (currentIndex != -1 && currentIndex < updatedUsers.size - 1) {
-                        // Move to the next user
-                        currentIndex++
-                    } else {
-                        // If the deleted user was the last, move to the new last user
-                        currentIndex = updatedUsers.size - 1
+                if (updatedUsers.isEmpty()) {
+                    // If no users are left in the cache, reset the current user
+                    _currentUser.value = null
+                    Log.d(TAG, "No more users to display. Cache is empty.")
+                } else {
+                    // Adjust index if needed
+                    if (currentIndex >= updatedUsers.size) {
+                        currentIndex = updatedUsers.size - 1 // Prevent index overflow
                     }
 
                     // Update the current user
-                    _currentUser.value = updatedUsers.getOrNull(currentIndex)
-                    Log.d(TAG, "Displaying next user: ID = ${_currentUser.value?.id}, Name = ${_currentUser.value?.name}")
-                } else {
-                    // No users left in the cache
-                    _currentUser.value = null
-                    currentIndex = 0
-                    Log.d(TAG, "No more users to display. Cache is empty.")
+                    _currentUser.value = updatedUsers[currentIndex]
+                    Log.d(TAG, "Displaying next user after deletion: ID = ${_currentUser.value?.id}, Name = ${_currentUser.value?.name}")
                 }
             }
         } ?: Log.d(TAG, "No user to delete.")
+    }
+
+    /**
+     * Handles the "Like" action.
+     */
+    fun handleLike() {
+        val loggedInUserId = remoteRepository.getCurrentUserId()
+        val likedUser = _currentUser.value
+
+        if (loggedInUserId == null || likedUser == null) {
+            Log.e(TAG, "Cannot handle like. Missing logged-in user ID or current user.")
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                // Perform Like action using Remote Repository
+                remoteRepository.handleLikeAction(loggedInUserId, likedUser.id)
+                Log.d(TAG, "User ${likedUser.id} liked successfully.")
+
+                // Delete the user from the local cache and display the next user
+                deleteCurrentUser()
+                displayNextUser()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error handling like action: ${e.message}", e)
+            }
+        }
+    }
+
+    /**
+     * Handles the "Dislike" action.
+     */
+    fun handleDislike() {
+        val loggedInUserId = remoteRepository.getCurrentUserId()
+        val dislikedUser = _currentUser.value
+
+        if (loggedInUserId == null || dislikedUser == null) {
+            Log.e(TAG, "Cannot handle dislike. Missing logged-in user ID or current user.")
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                // Perform Dislike action using Remote Repository
+                remoteRepository.handleDislikeAction(loggedInUserId, dislikedUser.id)
+                Log.d(TAG, "User ${dislikedUser.id} disliked successfully.")
+
+                // Delete the user from the local cache and display the next user
+                deleteCurrentUser()
+                displayNextUser()
+            } catch (e: Exception) {
+                Log.e(TAG, "Error handling dislike action: ${e.message}", e)
+            }
+        }
     }
 
 

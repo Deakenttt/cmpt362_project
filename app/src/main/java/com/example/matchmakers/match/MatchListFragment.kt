@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.matchmakers.database.UserDatabase
 // DK modified
 import com.example.matchmakers.repository.LocalUserRepository
+import com.example.matchmakers.repository.RemoteUserRepository
 import com.example.matchmakers.ui.home.HomeViewModel
 import com.example.matchmakers.ui.home.HomeViewModelFactory
 import com.example.matchmakers.viewmodel.UserViewModel
@@ -42,8 +43,9 @@ class MatchListFragment : Fragment() {
         // get UserViewModel
         val userDatabase = UserDatabase.getDatabase(requireContext())
         val userDao = userDatabase.userDao()
-        val userRepository = LocalUserRepository(userDao)
-        val userViewModelFactory = UserViewModelFactory(userRepository)
+        val localUserRepository = LocalUserRepository(userDao)
+        val remoteUserRepository = RemoteUserRepository()
+        val userViewModelFactory = UserViewModelFactory(localUserRepository, remoteUserRepository)
         val userViewModel = ViewModelProvider(requireActivity(), userViewModelFactory)[UserViewModel::class.java]
 
         // use HomeViewModelFactory to create HomeViewModel

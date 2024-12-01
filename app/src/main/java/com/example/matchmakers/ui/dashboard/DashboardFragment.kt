@@ -22,6 +22,7 @@ import com.example.matchmakers.match.MatchListFragment
 import com.example.matchmakers.match.MatchListAdapter
 // DK modified
 import com.example.matchmakers.repository.LocalUserRepository
+import com.example.matchmakers.repository.RemoteUserRepository
 import com.example.matchmakers.ui.home.HomeViewModel
 import com.example.matchmakers.ui.home.HomeViewModelFactory
 import com.example.matchmakers.ui.mapview.MapActivity
@@ -66,10 +67,11 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
         // get UserDatabase 和 UserRepository
         val userDatabase = UserDatabase.getDatabase(requireContext())
         val userDao = userDatabase.userDao()
-        val userRepository = LocalUserRepository(userDao)
+        val localUserRepository = LocalUserRepository(userDao)
+        val remoteUserRepository = RemoteUserRepository()
 
         // use UserViewModelFactory create UserViewModel
-        val userViewModelFactory = UserViewModelFactory(userRepository)
+        val userViewModelFactory = UserViewModelFactory(localUserRepository, remoteUserRepository)
         val userViewModel = ViewModelProvider(requireActivity(), userViewModelFactory)[UserViewModel::class.java]
 
         // use HomeViewModelFactory create HomeViewModel
