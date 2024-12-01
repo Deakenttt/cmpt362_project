@@ -37,11 +37,13 @@ class EditInterestsActivity: AppCompatActivity(), OnItemSelectedListener {
         setContentView(R.layout.activity_edit_interests)
 
         val interests = if (Build.VERSION.SDK_INT >= 33){
-            intent.getSerializableExtra("interests", Serializable::class.java) as List<String>
+            intent.getSerializableExtra("interests", Serializable::class.java) as List<String>?
         } else{
-            intent.getSerializableExtra("interests") as List<String>
+            intent.getSerializableExtra("interests") as List<String>?
         }
-        newInterests.addAll(interests)
+        if (interests != null){
+            newInterests.addAll(interests)
+        }
 
         interestsList = findViewById(R.id.edit_interests_list)
         options = findViewById(R.id.edit_interests_options)
