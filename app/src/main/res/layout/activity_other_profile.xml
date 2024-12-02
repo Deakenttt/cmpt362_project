@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -14,88 +14,117 @@
         app:navigationIcon="?attr/homeAsUpIndicator"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
+    <!-- Content -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar">
+        android:layout_below="@id/toolbar"
+        android:layout_marginTop="4dp"
+        android:padding="16dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!-- Username -->
             <TextView
                 android:id="@+id/text_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:paddingBottom="8dp"
+                android:text="Other User's Profile"
                 android:textSize="24sp"
-                android:text="Other User's Profile"/>
+                android:textStyle="bold" />
 
+            <!-- Age -->
             <TextView
                 android:id="@+id/text_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Other User's Age"/>
+                android:paddingBottom="16dp"
+                android:text="Age: 25" />
 
+            <!-- Avatar and Biography -->
+
+            <!-- Interests -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:orientation="horizontal">
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingBottom="16dp">
 
-                <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-                    <ImageView
-                        android:id="@+id/other_avatar_image"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
-                        android:scaleType="fitCenter"
-                        android:layout_gravity="center"
-                        android:background="#0024d6ff" />
-                </FrameLayout>
+                <!-- Avatar -->
+                <ImageView
+                    android:id="@+id/other_avatar_image"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:background="@drawable/ic_placeholder"
+                    android:contentDescription="@string/avatar_image"
+                    android:scaleType="centerCrop" />
 
-                <androidx.core.widget.NestedScrollView
+                <!-- Biography -->
+                <TextView
+                    android:id="@+id/text_biography"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="12dp"
-                    android:layout_weight="1">
-                    <TextView
-                        android:id="@+id/text_biography"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="top"
-                        android:paddingVertical="0dp"
-                        android:layout_marginHorizontal="4dp"
-                        android:scrollbars="vertical"
-                        android:text="Other user's biography"/>
-                </androidx.core.widget.NestedScrollView>
-
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:elevation="4dp"
+                    android:padding="8dp"
+                    android:scrollbars="vertical"
+                    android:text="Other user's biography" />
             </LinearLayout>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Interests"/>
+                android:paddingBottom="8dp"
+                android:text="Interests"
+                android:textStyle="bold" />
 
             <GridView
                 android:id="@+id/profile_interests"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:numColumns="3" />
+                android:horizontalSpacing="8dp"
+                android:numColumns="3"
+                android:paddingBottom="16dp"
+                android:verticalSpacing="8dp" />
 
-            <Button
-                android:id="@+id/block_button"
-                android:layout_width="wrap_content"
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Block User"/>
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingTop="8dp">
 
-            <Button
-                android:id="@+id/report_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Report User"/>
+                <!-- Block Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/block_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:text="Block User"
+                    app:cornerRadius="16dp"
+                    app:icon="@drawable/ic_block"
+                    app:iconGravity="textEnd"
+                    app:iconPadding="8dp" />
+
+                <!-- Report Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/report_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Report User"
+                    app:cornerRadius="16dp"
+                    app:icon="@drawable/ic_report"
+                    app:iconGravity="textEnd"
+                    app:iconPadding="8dp" />
+            </LinearLayout>
 
         </LinearLayout>
 

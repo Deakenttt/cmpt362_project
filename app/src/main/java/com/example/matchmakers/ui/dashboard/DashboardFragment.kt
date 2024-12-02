@@ -90,9 +90,9 @@ class DashboardFragment : Fragment(), OnMapReadyCallback {
     }
 
     private fun setupButtons() {
-        binding.matchButton.setOnClickListener {
-            navigateToMatchListFragment()
-        }
+//        binding.matchButton.setOnClickListener {
+//            navigateToMatchListFragment()
+//        }
         binding.mapButton.setOnClickListener {
             val intent = Intent(requireContext(), MapActivity::class.java)
             startActivity(intent)
