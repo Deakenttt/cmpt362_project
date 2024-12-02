@@ -18,17 +18,21 @@ import com.example.matchmakers.network.RetrofitInstance
 import com.example.matchmakers.databinding.ActivityMainBinding
 import com.example.matchmakers.maplogic.LocationPermissionHelper
 import com.example.matchmakers.maplogic.LocationService
+import com.example.matchmakers.network.ClusterApiService
 import com.example.matchmakers.ui.auth.LoginActivity
 import com.example.matchmakers.worker.UserSyncWorker
 import com.google.firebase.auth.FirebaseAuth
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class  MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var apiService: ClusterApiService
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,8 +71,16 @@ class  MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // update clusters (not everytime)
-//        updateClusters()
+        // Initialize the Retrofit service
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://recommand-sys-408256072995.us-central1.run.app") // Use your API base URL
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        apiService = retrofit.create(ClusterApiService::class.java)
+
+        // Call the POST method
+        sendPostRequest()
 
         val navView: BottomNavigationView = binding.navView
 
@@ -88,21 +100,6 @@ class  MainActivity : AppCompatActivity() {
 
     }
 
-//    private fun updateClusters() {
-//        RetrofitInstance.api.updateClusters().enqueue(object : Callback<Void> {
-//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-//                if (response.isSuccessful) {
-//                    Toast.makeText(this@MainActivity, "Clusters updated successfully", Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(this@MainActivity, "Failed to update clusters", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//
-//            override fun onFailure(call: Call<Void>, t: Throwable) {
-//                Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-//            }
-//        })
-//    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
@@ -117,5 +114,22 @@ class  MainActivity : AppCompatActivity() {
 
         // Enqueue the work request
         WorkManager.getInstance(context).enqueue(workRequest)
+    }
+
+    private fun sendPostRequest() {
+        println("mgs: Sending POST request...")
+        apiService.updateClusters().enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    println("mgs: POST successful")
+                } else {
+                    println("mgs: POST failed with code: ${response.code()} - ${response.message()} - ${response.body()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("mgs: POST request failed due to: ${t.message}")
+            }
+        })
     }
 }
