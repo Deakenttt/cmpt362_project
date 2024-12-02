@@ -12,7 +12,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="24sp"
+            android:textStyle="bold"
             android:layout_marginBottom="12dp"
+            android:textColor="?attr/colorPrimary"
             android:text="Your Interests"/>
         <TextView
             android:layout_width="wrap_content"
@@ -30,7 +32,8 @@
         <Spinner
             android:id="@+id/edit_interests_options"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:minHeight="48dp" />
 
         <ListView
             android:id="@+id/edit_interests_list"

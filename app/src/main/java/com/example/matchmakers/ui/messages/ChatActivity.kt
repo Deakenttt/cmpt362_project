@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -85,7 +86,7 @@ class ChatActivity: AppCompatActivity() {
 
         chatList.setOnItemClickListener{_,_,_,_->textToSend.clearFocus()}
 
-        sendButton = findViewById(R.id.chat_send)
+        val sendButton: ImageButton = findViewById(R.id.chat_send)
         textToSend = findViewById(R.id.chat_input)
 
         val chatViewModel: ChatViewModel by viewModels()
