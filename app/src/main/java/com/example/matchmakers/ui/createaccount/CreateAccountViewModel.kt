@@ -33,6 +33,7 @@ class CreateAccountViewModel(
     private val storage = Firebase.storage
     private val ref = storage.reference
 
+
     private val _accountCreated = MutableLiveData<Boolean>()
     val accountCreated: LiveData<Boolean> = _accountCreated
 

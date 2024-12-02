@@ -24,8 +24,14 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.example.matchmakers.MainActivity
 import com.example.matchmakers.R
+import com.example.matchmakers.network.ClusterApiService
 import com.example.matchmakers.ui.profile.ImageUtils
 import com.google.android.material.textfield.TextInputEditText
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 
 class CreateAccount : AppCompatActivity() {
@@ -51,6 +57,8 @@ class CreateAccount : AppCompatActivity() {
     private lateinit var cameraLauncher: ActivityResultLauncher<Intent>
     private lateinit var galleryLauncher: ActivityResultLauncher<String>
     private lateinit var tempImgUri: Uri
+
+    private lateinit var apiService: ClusterApiService
 
     private var imageViewTag: String = ""
 
@@ -135,6 +143,15 @@ class CreateAccount : AppCompatActivity() {
         }
 
         observeImages()
+        // Initialize the Retrofit service
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://recommand-sys-408256072995.us-central1.run.app") // Use your API base URL
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        apiService = retrofit.create(ClusterApiService::class.java)
+
+
 
         // Submit button click listener
         submitButton.setOnClickListener {
@@ -212,13 +229,14 @@ class CreateAccount : AppCompatActivity() {
 
         viewModel.accountCreated.observe(this, Observer { isCreated ->
             if (isCreated) {
-
+                sendPostRequest()
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
                 // Implement more robust error handling later
                 println("mgs: Error adding user info or user not logged in")
             }
+
         })
 
         // Set image click listeners
@@ -339,6 +357,23 @@ class CreateAccount : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun sendPostRequest() {
+        println("mgs: Sending POST request...")
+        apiService.updateClusters().enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    println("mgs: POST successful")
+                } else {
+                    println("mgs: POST failed with code: ${response.code()} - ${response.message()} - ${response.body()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("mgs: POST request failed due to: ${t.message}")
+            }
+        })
     }
 
 }
