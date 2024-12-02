@@ -82,7 +82,12 @@ class CreateAccount : AppCompatActivity() {
             "Snowboarding",
             "Swimming",
             "Drinking",
-            "Poker")
+            "Poker",
+            "Photography",
+            "Movies",
+            "Skiing",
+            "Reading",
+            "Hiking")
 
         interest1Spinner.adapter = ArrayAdapter(
             this,
