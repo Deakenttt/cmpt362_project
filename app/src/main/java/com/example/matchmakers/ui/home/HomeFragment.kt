@@ -1,10 +1,11 @@
 package com.example.matchmakers.ui.home
 
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.matchmakers.databinding.FragmentHomeBinding
@@ -16,12 +17,16 @@ import com.google.android.material.snackbar.Snackbar
 import com.example.matchmakers.database.UserDatabase
 import com.example.matchmakers.network.ClusterApiService
 import com.example.matchmakers.repository.RemoteUserRepository
-import okhttp3.ResponseBody
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.storage
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.net.URL
 
 class HomeFragment : Fragment() {
 
@@ -30,8 +35,12 @@ class HomeFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var homeViewModel: HomeViewModel
-    private lateinit var apiService: ClusterApiService
-    private lateinit var postButton: Button
+
+    private var db = FirebaseFirestore.getInstance()
+    private var storage = Firebase.storage
+    private var ref = storage.reference
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,16 +49,7 @@ class HomeFragment : Fragment() {
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
 
-        // Initialize the Retrofit service
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://recommand-sys-408256072995.us-central1.run.app") // Use your API base URL
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
 
-        apiService = retrofit.create(ClusterApiService::class.java)
-
-        // Call the POST method
-        sendPostRequest()
 
         initialize()
         return binding.root
@@ -107,13 +107,6 @@ class HomeFragment : Fragment() {
         binding.likeButton1.setOnClickListener { homeViewModel.likeUser() }
         binding.dislikeButton1.setOnClickListener { homeViewModel.dislikeUser() }
 
-        postButton = binding.postButton
-        postButton.setOnClickListener {
-            // Handle the POST button click
-            println("mgs: Click listener")
-            sendPostRequest() // Call the method to send the POST request
-        }
-
     }
 
     /**
@@ -123,58 +116,66 @@ class HomeFragment : Fragment() {
         // Example: Assuming the User model has a `pictures` field containing 6 image resource IDs
 //        val pictures = user.pictures // List of image resource IDs (Int)
 
-        // Card 1: Show basic info with the first picture
-        binding.username.text = user.name
-        binding.userAge.text = "Age: ${user.age}"
-        binding.userInterest1.text = "Interests: ${user.interest}"
-//        binding.userImage1.setImageResource(pictures[0]) // Show first picture
+        val displayedUserUid = user.id
+        db.collection("profileinfo").document(displayedUserUid).get()
+            .addOnSuccessListener { document ->
+                val name = document.getString("name")
+                binding.username.text = name
+                val age = document.getLong("age")?.toInt()
+                binding.userAge.text = age.toString()
+                val biography = document.getString("biography")
+                binding.userBio.text = biography
+                val interest1 = document.getString("interest1")
+                val interest2 = document.getString("interest2")
+                val interest3 = document.getString("interest3")
+                binding.userInterests.text = "${interest1}, ${interest2}, ${interest3}"
+                val avatarRef = ref.child("avatars/${displayedUserUid}.jpg")
+                loadBitmapIntoView(avatarRef, binding.userImage)
+                val images = document.get("images") as? List<String>
+                if (images != null && images.isNotEmpty()) {
+                    val image1 = images.getOrNull(0)
+                    val image2 = images.getOrNull(1)
+                    val image3 = images.getOrNull(2)
+                    val image1Ref = ref.child("gallery/${displayedUserUid}/${image1}")
+                    val image2Ref = ref.child("gallery/${displayedUserUid}/${image2}")
+                    val image3Ref = ref.child("gallery/${displayedUserUid}/${image3}")
 
-        // Card 2: Show the second picture and additional description
-        binding.userInterest2.text = "Explores new hobbies and loves adventure."
-//        binding.userImage2.setImageResource(pictures[1])
+                    loadBitmapIntoView(image1Ref, binding.userImage1)
+                    loadBitmapIntoView(image2Ref, binding.userImage2)
+                    loadBitmapIntoView(image3Ref, binding.userImage3)
+                }
+            }
+    }
 
-        // Card 3: Show the third picture with another description
-//        binding.userInterest3.text = "${user.name} is passionate about ${user.interest}."
-//        binding.userImage3.setImageResource(pictures[2])
-//
-//        // Card 4: Show the fourth picture and personalized detail
-//        binding.userInterest4.text = "Enjoys connecting with like-minded individuals."
-//        binding.userImage4.setImageResource(pictures[3])
-//
-//        // Card 5: Show the fifth picture and hobbies
-//        binding.userInterest5.text = "${user.name} spends time on photography and social events."
-//        binding.userImage5.setImageResource(pictures[4])
-//
-//        // Card 6: Show the sixth picture and closing details
-//        binding.userInterest6.text = "Enjoys hiking, cooking, and exploring new cultures."
-//        binding.userImage6.setImageResource(pictures[5])
+    private fun loadBitmapIntoView(imageRef: StorageReference, imageView: ImageView) {
+        imageRef.downloadUrl
+            .addOnSuccessListener { uri ->
+                Thread {
+                    try {
+                        // Open an InputStream to fetch the image data
+                        val connection = URL(uri.toString()).openConnection()
+                        val inputStream = connection.getInputStream()
+                        val bitmap = BitmapFactory.decodeStream(inputStream)
+
+                        // Set the bitmap to the ImageView on the main thread
+                        imageView.post {
+                            imageView.setImageBitmap(bitmap)
+                        }
+                    } catch (e: Exception) {
+                        println("Failed to load image: ${e.message}")
+                    }
+                }.start()
+            }
+            .addOnFailureListener { exception ->
+                println("Failed to fetch image URL: ${exception.message}")
+            }
     }
 
     /**
      * Show a message when no recommended users are available.
      */
     private fun showNoMoreUsersMessage() {
-        // Card 1: Display "no more users" message
-        binding.username.text = "No more users available"
-        binding.userAge.text = ""
-        binding.userInterest1.text = ""
-//        binding.userImage1.setImageResource(R.drawable.sample_user_image) // Placeholder image
-
-        // Hide content in other cards
-        binding.userInterest2.text = ""
-//        binding.userImage2.setImageResource(R.drawable.sample_user_image)
-
-//        binding.userInterest3.text = ""
-//        binding.userImage3.setImageResource(R.drawable.sample_user_image)
-//
-//        binding.userInterest4.text = ""
-//        binding.userImage4.setImageResource(R.drawable.sample_user_image)
-//
-//        binding.userInterest5.text = ""
-//        binding.userImage5.setImageResource(R.drawable.sample_user_image)
-//
-//        binding.userInterest6.text = ""
-//        binding.userImage6.setImageResource(R.drawable.sample_user_image)
+        // Add some sort of popup to inform user that no more users are available currently
     }
 
     override fun onDestroyView() {
@@ -182,21 +183,6 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    private fun sendPostRequest() {
-        println("mgs: Sending POST request...")
-        apiService.updateClusters().enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    println("mgs: POST successful")
-                } else {
-                    println("mgs: POST failed with code: ${response.code()} - ${response.message()} - ${response.body()}")
-                }
-            }
 
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                println("mgs: POST request failed due to: ${t.message}")
-            }
-        })
-    }
 
 }
