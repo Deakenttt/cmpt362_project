@@ -212,6 +212,7 @@ class CreateAccount : AppCompatActivity() {
 
         viewModel.accountCreated.observe(this, Observer { isCreated ->
             if (isCreated) {
+
                 startActivity(Intent(this, MainActivity::class.java))
                 finish()
             } else {
