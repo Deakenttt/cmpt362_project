@@ -6,17 +6,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.matchmakers.model.User
 import com.example.matchmakers.viewmodel.UserViewModel
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
 
+    val loggedInUser = FirebaseAuth.getInstance()
+    private val _mutualLikeStatus = MutableLiveData<Boolean?>()
+    val mutualLikeStatus: LiveData<Boolean?> get() = _mutualLikeStatus
+
     // Exposing the currently displayed user from UserViewModel
     val currentRecommendedUser: LiveData<User?> get() = userViewModel.currentUser
-
 
     // Holds error messages for the UI
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
+
+    val db = FirebaseFirestore.getInstance()
 
     init {
         // Ensure the first user is displayed on initialization
@@ -29,13 +36,46 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
      */
     fun likeUser() {
         val currentUser = currentRecommendedUser.value
-        if (currentUser == null) {
-            _errorMessage.value = "No user to like."
+        val loggedInUserUid = loggedInUser.currentUser?.uid
+
+        if (currentUser == null || loggedInUserUid == null) {
+            _errorMessage.value = "No user to like or user not logged in."
             return
         }
+
         viewModelScope.launch {
             try {
-                userViewModel.handleLike() // Call UserViewModel's like handler
+                userViewModel.handleLike()
+
+                db.collection("profileinfo").document(currentUser.id).get()
+                    .addOnSuccessListener { document ->
+                        val likeList = document.get("LikeList") as? List<String>
+                        if (likeList != null && loggedInUserUid in likeList) {
+                            _mutualLikeStatus.value = true
+
+                            val participants = listOf(loggedInUserUid, currentUser.id)
+                            val messages = mutableListOf<Map<String, Any>>()
+
+                            val conversationData = hashMapOf(
+                                "participants" to participants,
+                                "messages" to messages
+                            )
+
+                            db.collection("conversations").add(conversationData)
+                                .addOnSuccessListener {
+                                    _errorMessage.value = null
+                                }
+                                .addOnFailureListener { e ->
+                                    _errorMessage.value = "Failed to create conversation: ${e.localizedMessage}"
+                                }
+                        } else {
+                            _mutualLikeStatus.value = false
+                        }
+                    }
+                    .addOnFailureListener { e ->
+                        _errorMessage.value = "Failed to retrieve LikeList: ${e.localizedMessage}"
+                    }
+
                 _errorMessage.value = null // Clear any error messages
             } catch (e: Exception) {
                 _errorMessage.value = "Failed to like user: ${e.localizedMessage}"

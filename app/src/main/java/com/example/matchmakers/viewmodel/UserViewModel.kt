@@ -6,6 +6,7 @@ import com.example.matchmakers.domain.UserService
 import com.example.matchmakers.model.User
 import com.example.matchmakers.repository.LocalUserRepository
 import com.example.matchmakers.repository.RemoteUserRepository
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.launch
 
 class UserViewModel(
@@ -21,6 +22,8 @@ class UserViewModel(
     // LiveData to observe the currently displayed user
     private val _currentUser = MutableLiveData<User?>()
     val currentUser: LiveData<User?> get() = _currentUser
+
+    private val db = FirebaseFirestore.getInstance()
 
     // Internal index to keep track of the current user in the list
     private var currentIndex = 0

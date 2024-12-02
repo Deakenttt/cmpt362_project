@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.example.matchmakers.R
 import com.example.matchmakers.model.User
 
-class MessagesAdapter(private val context: Context, private var entries: List<User>): BaseAdapter() {
+class MessagesAdapter(private val context: Context, private var entries: List<MessageUser>): BaseAdapter() {
     override fun getItem(position: Int): Any {
         return entries[position]
     }
@@ -21,7 +21,7 @@ class MessagesAdapter(private val context: Context, private var entries: List<Us
         return entries.size
     }
 
-    fun updateEntries(newEntries: List<User>) {
+    fun updateEntries(newEntries: List<MessageUser>) {
         entries = newEntries
         notifyDataSetChanged()
     }

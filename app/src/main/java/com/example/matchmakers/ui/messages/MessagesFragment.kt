@@ -16,7 +16,7 @@ import com.example.matchmakers.model.User
 import com.google.firebase.auth.FirebaseAuth
 
 class MessagesFragment: Fragment() {
-    private var usersArray = listOf<User>()
+    private var usersArray = listOf<MessageUser>()
     private lateinit var messagesList: ListView
     private lateinit var adapter: MessagesAdapter
     private lateinit var receiverId: String
@@ -39,11 +39,14 @@ class MessagesFragment: Fragment() {
 
         messagesViewModel.fetchMatches()
 
-        // Observe changes to the users list and update the adapter
-        messagesViewModel.usersList.observe(viewLifecycleOwner, Observer { userList ->
-            usersArray = userList
-            // Update the adapter with the new list
-            adapter.updateEntries(usersArray)
+
+        messagesViewModel.conversationIds.observe(viewLifecycleOwner, Observer { conversationIds ->
+            if (conversationIds.isNotEmpty()) {
+                messagesViewModel.usersList.observe(viewLifecycleOwner, Observer { userList ->
+                    usersArray = userList
+                    adapter.updateEntries(usersArray)
+                })
+            }
         })
 
         messagesList = root.findViewById(R.id.messages_list)

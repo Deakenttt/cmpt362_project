@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.matchmakers.databinding.FragmentHomeBinding
@@ -98,6 +99,12 @@ class HomeFragment : Fragment() {
         homeViewModel.errorMessage.observe(viewLifecycleOwner) { error ->
             error?.let {
                 Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
+            }
+        }
+
+        homeViewModel.mutualLikeStatus.observe(viewLifecycleOwner)  { isMutual ->
+            if(isMutual == true) {
+                Toast.makeText(requireContext(), "Congrats, you matched! Messages inbox now open!", Toast.LENGTH_LONG).show()
             }
         }
     }

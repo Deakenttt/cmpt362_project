@@ -3,7 +3,6 @@ package com.example.matchmakers.ui.messages
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.example.matchmakers.model.User
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,8 +19,10 @@ class MessagesViewModel : ViewModel() {
     private val _lastMessage = MutableLiveData<Map<String, String>>()
     val lastMessage: LiveData<Map<String, String>> get() = _lastMessage
 
-    private val _usersList = MutableLiveData<List<User>>()
-    val usersList: LiveData<List<User>> get() = _usersList
+    private val _usersList = MutableLiveData<List<MessageUser>>()
+    val usersList: LiveData<List<MessageUser>> get() = _usersList
+
+    private val _matchList = MutableLiveData<List<String>>()
 
     fun fetchMatches() {
         val currentUser = auth.currentUser ?: return
@@ -43,7 +44,7 @@ class MessagesViewModel : ViewModel() {
 
     private fun handleConversations(documents: QuerySnapshot, currentUid: String) {
         val conversationIdsList = mutableListOf<String>()
-        val usersList = mutableListOf<User>()
+        val usersList = mutableListOf<MessageUser>()
         val lastMessageMap = mutableMapOf<String, String>()
 
         if (documents.isEmpty) {
@@ -67,6 +68,8 @@ class MessagesViewModel : ViewModel() {
         _conversationIds.value = conversationIdsList
         _lastMessage.value = lastMessageMap
         println("mgs: last message value in viewmodel = ${_lastMessage.value}")
+
+
     }
 
     private fun getLastMessageText(document: DocumentSnapshot): String {
@@ -77,7 +80,7 @@ class MessagesViewModel : ViewModel() {
     private fun getOtherUserDetails(
         participants: List<String>,
         currentUid: String,
-        usersList: MutableList<User>,
+        usersList: MutableList<MessageUser>,
         conversationId: String
     ) {
         val otherUserUid = participants.firstOrNull { it != currentUid } ?: return
@@ -108,13 +111,14 @@ class MessagesViewModel : ViewModel() {
         otherUserUid: String,
         conversationId: String,
         lastMessageText: String
-    ): User {
+    ): MessageUser {
         val userName = userDoc.getString("name") ?: "Unknown User"
         val age = userDoc.getLong("age")?.toInt() ?: 0
-        val interest = userDoc.getString("interest") ?: "Unknown interest"
+        val interest1 = userDoc.getString("interest1") ?: "Unknown interest"
+        val interest2 = userDoc.getString("interest2") ?: "Unknown interest"
+        val interest3 = userDoc.getString("interest3") ?: "Unknown interest"
 
-        return User(otherUserUid, userName, age, interest, lastMessageText, conversationId)
+        return MessageUser(otherUserUid, userName, age, interest1, interest2, interest3, lastMessageText, conversationId)
     }
+
 }
-
-
