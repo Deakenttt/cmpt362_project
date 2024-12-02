@@ -25,12 +25,22 @@
 
         <TextView
             android:id="@+id/chat_username"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:textSize="24sp"
             android:padding="4dp"
             android:text="Username"/>
+
+        <TextView
+            android:id="@+id/chat_age"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="8dp"
+            android:layout_gravity="center"
+            android:textColor="#808080"
+            android:padding="4dp"
+            android:text="Age"/>
 
         <Button
             android:id="@+id/chat_view_profile"

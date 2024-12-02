@@ -58,6 +58,7 @@ class MessagesFragment: Fragment() {
             val intent = Intent(context, ChatActivity::class.java)
             intent.putExtra(ChatActivity.USER_ID_KEY, usersArray[position].id)
             intent.putExtra(ChatActivity.USER_NAME_KEY, usersArray[position].name)
+            intent.putExtra(ChatActivity.USER_AGE_KEY, usersArray[position].age)
             intent.putExtra(ChatActivity.CURRENT_USER_ID_KEY, currentUserId)
             intent.putExtra(ChatActivity.CONVERSATION_ID_KEY, usersArray[position].conversationId)
             startActivity(intent)

@@ -169,6 +169,12 @@ class CreateAccount : AppCompatActivity() {
                 return@setOnClickListener
             }
 
+            // Check that all interests are unique
+            if (interest1 == interest2 || interest2 == interest3 || interest1 == interest3){
+                Toast.makeText(this, "You cannot select the same interest more than once.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             // Check if avatar image is set
             if (viewModel.avatarImage.value == null) {
                 Toast.makeText(this, "Please set an avatar image.", Toast.LENGTH_SHORT).show()
@@ -213,10 +219,16 @@ class CreateAccount : AppCompatActivity() {
 
         // Set image click listeners
         // Set OnClickListeners for buttons
-        avatarButton.setOnClickListener { showImageSourceDialog("avatar_image") }
-        addGalleryPhoto1Button.setOnClickListener { showImageSourceDialog("create_gallery_image_1") }
-        addGalleryPhoto2Button.setOnClickListener { showImageSourceDialog("create_gallery_image_2") }
-        addGalleryPhoto3Button.setOnClickListener { showImageSourceDialog("create_gallery_image_3") }
+        avatarButton.setOnClickListener { clearFocus(); showImageSourceDialog("avatar_image") }
+        addGalleryPhoto1Button.setOnClickListener { clearFocus(); showImageSourceDialog("create_gallery_image_1") }
+        addGalleryPhoto2Button.setOnClickListener { clearFocus(); showImageSourceDialog("create_gallery_image_2") }
+        addGalleryPhoto3Button.setOnClickListener { clearFocus(); showImageSourceDialog("create_gallery_image_3") }
+    }
+
+    private fun clearFocus(){
+        nameEditText.clearFocus()
+        ageEditText.clearFocus()
+        biographyEditText.clearFocus()
     }
 
     private fun observeImages() {

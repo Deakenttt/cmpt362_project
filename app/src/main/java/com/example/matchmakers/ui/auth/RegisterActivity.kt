@@ -1,7 +1,9 @@
 package com.example.matchmakers.ui.auth
 
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -17,6 +19,8 @@ class RegisterActivity : AppCompatActivity() {
     private lateinit var regButton: Button
     private lateinit var loginRedirectButton: Button
 
+    private lateinit var sharedPref: SharedPreferences
+
     private val registerViewModel: RegisterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,12 +32,28 @@ class RegisterActivity : AppCompatActivity() {
         regButton = findViewById(R.id.registerButton)
         loginRedirectButton = findViewById(R.id.loginRedirectButton)
 
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+
         // Observe registration result
         registerViewModel.registrationResult.observe(this) { success ->
             if (success) {
                 Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, CreateAccount::class.java))
                 finish()
+            }
+        }
+
+        // Store the login information if the registration succeeds
+        registerViewModel.storedLogin.observe(this) { login ->
+            val email = login.email
+            val password = login.password
+            if (email != "" && password != ""){
+                with (sharedPref.edit()){
+                    clear()
+                    putString(LoginActivity.EMAIL_KEY, email)
+                    putString(LoginActivity.PASSWORD_KEY, password)
+                    apply()
+                }
             }
         }
 

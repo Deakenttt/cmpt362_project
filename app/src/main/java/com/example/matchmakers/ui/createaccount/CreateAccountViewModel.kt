@@ -68,11 +68,18 @@ class CreateAccountViewModel : ViewModel() {
         val currentUser = auth.currentUser
         if (currentUser != null) {
             val uid = currentUser.uid
+            val genderString = when(gender){
+                "Male" -> "M"
+                "Female" -> "F"
+                else -> ""
+            }
             val userInfo = hashMapOf(
                 "interest" to interest1,
                 "latitude" to 0.0,
                 "longitude" to 0.0,
                 "cluster" to 0,
+                "gender" to genderString,
+                "name" to name,
                 "recommended" to emptyList<Int>(),
             )
 
@@ -166,7 +173,7 @@ class CreateAccountViewModel : ViewModel() {
         uploadTask.addOnFailureListener {
             Toast.makeText(context, "Error uploading image", Toast.LENGTH_SHORT).show()
         }.addOnSuccessListener { taskSnapshot ->
-            Toast.makeText(context, "Image successfully uploaded", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(context, "Image successfully uploaded", Toast.LENGTH_SHORT).show()
             callback() // Call the callback once the image is uploaded
         }
     }
