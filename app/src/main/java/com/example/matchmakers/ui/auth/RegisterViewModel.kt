@@ -1,5 +1,6 @@
 package com.example.matchmakers.ui.auth
 
+import android.preference.PreferenceManager
 import android.util.Patterns
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,6 +16,10 @@ class RegisterViewModel : ViewModel() {
 
     private val _errorMessage = MutableLiveData<String>()
     val errorMessage: LiveData<String> get() = _errorMessage
+
+    data class Login(var email: String = "", var password: String = "")
+    private val _storedLogin = MutableLiveData<Login>()
+    val storedLogin: LiveData<Login> get() = _storedLogin
 
     fun register(email: String, password: String) {
         if (email.isEmpty()) {
@@ -45,6 +50,7 @@ class RegisterViewModel : ViewModel() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     _registrationResult.value = true
+                    _storedLogin.value = Login(email, password)
                 } else {
                     // Get specific FirebaseAuth error message if registration fails
                     val exception = task.exception

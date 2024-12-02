@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.matchmakers.R
 import java.io.Serializable
@@ -28,8 +29,8 @@ class EditInterestsActivity: AppCompatActivity(), OnItemSelectedListener {
     // These are the interests that the user can choose from
     // This current list only includes some of the interests that were already in our db but we can add more later
     private val interestChoices = arrayListOf(
-        "Select Interest", "Travel", "Football", "Snowboarding", "Swimming", "Drinking", "Poker",
-        "Interest 1", "Interest 2", "Interest 3", "Interest 4", "Interest 5", "Interest 6"
+        "Select Interest", "Travel", "Football", "Snowboarding", "Swimming", "Drinking",
+        "Poker", "Photography", "Movies", "Skiing", "Reading", "Hiking"
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,11 +38,13 @@ class EditInterestsActivity: AppCompatActivity(), OnItemSelectedListener {
         setContentView(R.layout.activity_edit_interests)
 
         val interests = if (Build.VERSION.SDK_INT >= 33){
-            intent.getSerializableExtra("interests", Serializable::class.java) as List<String>
+            intent.getSerializableExtra("interests", Serializable::class.java) as List<String>?
         } else{
-            intent.getSerializableExtra("interests") as List<String>
+            intent.getSerializableExtra("interests") as List<String>?
         }
-        newInterests.addAll(interests)
+        if (interests != null){
+            newInterests.addAll(interests)
+        }
 
         interestsList = findViewById(R.id.edit_interests_list)
         options = findViewById(R.id.edit_interests_options)
@@ -63,6 +66,11 @@ class EditInterestsActivity: AppCompatActivity(), OnItemSelectedListener {
 
 
         saveButton.setOnClickListener{
+            if (newInterests.size != 3){
+                Toast.makeText(this, "Please select 3 interests", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             val result = Intent()
             result.putExtra(INTERESTS_KEY, newInterests.toList() as Serializable)
             setResult(RESULT_OK, result)

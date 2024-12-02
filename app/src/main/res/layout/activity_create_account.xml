@@ -1,65 +1,291 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".ui.createaccount.CreateAccount">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/name"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/name_input"
-        />
+        android:orientation="vertical"
+        android:paddingTop="16dp">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/age"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/age_input"
-        android:inputType="number" />
+        <!-- Name Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundMode="outline"
+            app:hintTextAppearance="@style/TextAppearance.MaterialComponents.Headline6">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/interests"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/interest_input"
-        />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/name_input" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-    <RadioGroup
-        android:id="@+id/gender_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        <!-- Age Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundMode="outline"
+            app:hintTextAppearance="@style/TextAppearance.MaterialComponents.Headline6">
 
-        <RadioButton
-            android:id="@+id/gender_male"
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/age_input"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Biography Input -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundMode="outline"
+            app:hintTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+            android:layout_marginTop="16dp">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/create_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/biography_input"
+                android:inputType="textMultiLine"
+                android:minLines="4" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Spinners Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Choose your interests:"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <Spinner
+            android:id="@+id/interest1_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/interest2_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/interest3_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:minHeight="48dp"
+            android:spinnerMode="dropdown" />
+
+        <!-- Gender Section -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Gender:"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/gender_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:gravity="center">
+
+            <RadioButton
+                android:id="@+id/gender_male"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender_male" />
+
+            <!-- Spacer for distance -->
+            <View
+                android:layout_width="48dp"
+                android:layout_height="wrap_content" />
+
+            <RadioButton
+                android:id="@+id/gender_female"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/gender_female" />
+        </RadioGroup>
+
+
+        <!-- Avatar Section -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:orientation="vertical"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/avatar_image"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:contentDescription="@string/avatar_description"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/ic_placeholder" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/add_avatar_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    app:icon="@drawable/ic_camera"
+                    app:iconGravity="textStart"
+                    app:iconPadding="8dp"
+                    android:text="@string/add_avatar" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Gallery Photos Section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="16dp">
+
+            <!-- Image 1 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/create_gallery_image_1"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:contentDescription="@string/gallery_image1_description"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_placeholder" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/add_gallery_photo_1_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:icon="@drawable/ic_gallery"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        android:text="@string/add_gallery_photo1" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Image 2 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/create_gallery_image_2"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:contentDescription="@string/gallery_image2_description"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_placeholder" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/add_gallery_photo2_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:icon="@drawable/ic_gallery"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        android:text="@string/add_gallery_photo2" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Image 3 -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:orientation="vertical"
+                    android:gravity="center">
+
+                    <ImageView
+                        android:id="@+id/create_gallery_image_3"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:contentDescription="@string/gallery_image3_description"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/ic_placeholder" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/add_gallery_photo3_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        app:icon="@drawable/ic_gallery"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        android:text="@string/add_gallery_photo3" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+
+        <!-- Submit Button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/submit_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/gender_male" />
-
-        <RadioButton
-            android:id="@+id/gender_female"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gender_female" />
-
-        <RadioButton
-            android:id="@+id/gender_other"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/gender_other" />
-    </RadioGroup>
-
-    <Button
-        android:id="@+id/submit_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="@string/submit"/>
-
-</LinearLayout>
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:padding="12dp"
+            android:text="@string/submit"
+            app:cornerRadius="16dp" />
+    </LinearLayout>
+</ScrollView>

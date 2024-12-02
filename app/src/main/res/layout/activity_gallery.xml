@@ -39,7 +39,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="1"/>
+                    android:text="Image 1"/>
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -65,11 +65,12 @@
                         android:minHeight="0dp"
                         android:minWidth="0dp"
                         android:text="Edit"/>
+                    <!-- User is forced to have 3 images so they are not allowed to delete any -->
                     <Button
                         android:id="@+id/gallery_delete_1"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_height="0dp"
+                        android:layout_weight="0"
                         android:minHeight="0dp"
                         android:minWidth="0dp"
                         android:text="Delete"/>
@@ -85,7 +86,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="2"/>
+                    android:text="Image 2"/>
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -114,8 +115,8 @@
                     <Button
                         android:id="@+id/gallery_delete_2"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_height="0dp"
+                        android:layout_weight="0"
                         android:minHeight="0dp"
                         android:minWidth="0dp"
                         android:text="Delete"/>
@@ -131,7 +132,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="3"/>
+                    android:text="Image 3"/>
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -160,8 +161,8 @@
                     <Button
                         android:id="@+id/gallery_delete_3"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:layout_height="0dp"
+                        android:layout_weight="0"
                         android:minHeight="0dp"
                         android:minWidth="0dp"
                         android:text="Delete"/>
@@ -173,6 +174,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:visibility="gone"
                 android:text="Add New Image"/>
 
         </LinearLayout>

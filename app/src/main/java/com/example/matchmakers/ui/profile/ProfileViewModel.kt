@@ -329,7 +329,7 @@ class ProfileViewModel: ViewModel() {
             "biography" to profile.biography,
             "timestamp" to timestamp
         )
-        db.collection("profileinfo").document(user.uid).set(profileMap).addOnSuccessListener{
+        db.collection("profileinfo").document(user.uid).update(profileMap).addOnSuccessListener{
             println("Updated profile")
         }.addOnFailureListener{ error ->
             println("Could not update profile: $error")

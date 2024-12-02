@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MatchMakers</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_map">Map</string>
     <string name="title_notifications">Notifications</string>
     <string name="title_messages">Messages</string>
     <string name="title_profile">Profile</string>
@@ -19,6 +19,13 @@
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
+
+    <string name="send_message">Send Message</string>
+    <string name="match_like">Match Like</string>
+    <string name="match_dislike">Match Dislike</string>
+    <string name="avatar_image">Avatar Image</string>
+
+
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris
@@ -62,4 +69,14 @@
     <string name="gender_other">Other</string>
     <string name="age_input">Age</string>
     <string name="no_more_recommended_users">no_more_recommended_users</string>
+    <string name="select_interest1">Select an interest</string>
+    <string name="gallery_image2_description">Gallery image 2</string>
+    <string name="add_gallery_photo2">Add photo</string>
+    <string name="gallery_image3_description">Gallery image 3</string>
+    <string name="avatar_description">Avatar</string>
+    <string name="add_avatar">Add avatar</string>
+    <string name="add_gallery_photo1">Add photo</string>
+    <string name="gallery_image1_description">Gallery photo 1</string>
+    <string name="add_gallery_photo3">Add photo</string>
+    <string name="biography_input">Add a bio</string>
 </resources>

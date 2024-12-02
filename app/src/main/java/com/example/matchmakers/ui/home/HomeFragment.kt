@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.matchmakers.databinding.FragmentHomeBinding
@@ -13,7 +14,14 @@ import com.example.matchmakers.viewmodel.UserViewModelFactory
 import com.example.matchmakers.model.User
 import com.google.android.material.snackbar.Snackbar
 import com.example.matchmakers.database.UserDatabase
+import com.example.matchmakers.network.ClusterApiService
 import com.example.matchmakers.repository.RemoteUserRepository
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class HomeFragment : Fragment() {
 
@@ -22,6 +30,8 @@ class HomeFragment : Fragment() {
 
     private lateinit var userViewModel: UserViewModel
     private lateinit var homeViewModel: HomeViewModel
+    private lateinit var apiService: ClusterApiService
+    private lateinit var postButton: Button
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +39,18 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+
+        // Initialize the Retrofit service
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://recommand-sys-408256072995.us-central1.run.app") // Use your API base URL
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        apiService = retrofit.create(ClusterApiService::class.java)
+
+        // Call the POST method
+        sendPostRequest()
+
         initialize()
         return binding.root
     }
@@ -84,6 +106,14 @@ class HomeFragment : Fragment() {
         // Handle like and dislike button clicks
         binding.likeButton1.setOnClickListener { homeViewModel.likeUser() }
         binding.dislikeButton1.setOnClickListener { homeViewModel.dislikeUser() }
+
+        postButton = binding.postButton
+        postButton.setOnClickListener {
+            // Handle the POST button click
+            println("mgs: Click listener")
+            sendPostRequest() // Call the method to send the POST request
+        }
+
     }
 
     /**
@@ -151,4 +181,22 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun sendPostRequest() {
+        println("mgs: Sending POST request...")
+        apiService.updateClusters().enqueue(object : Callback<Void> {
+            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+                if (response.isSuccessful) {
+                    println("mgs: POST successful")
+                } else {
+                    println("mgs: POST failed with code: ${response.code()} - ${response.message()} - ${response.body()}")
+                }
+            }
+
+            override fun onFailure(call: Call<Void>, t: Throwable) {
+                println("mgs: POST request failed due to: ${t.message}")
+            }
+        })
+    }
+
 }

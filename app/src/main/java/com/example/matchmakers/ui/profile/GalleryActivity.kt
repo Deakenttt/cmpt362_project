@@ -50,7 +50,7 @@ class GalleryActivity: AppCompatActivity() {
 
         profileViewModel = ViewModelProvider(this)[ProfileViewModel::class.java]
 
-        // Change to list later///////////////////////////////////////////
+        // User is now forced to have exactly 3 images so no list is necessary...
         container1 = findViewById(R.id.gallery_container_1)
         image1 = findViewById(R.id.gallery_image_1)
         edit1 = findViewById(R.id.gallery_edit_1)

@@ -14,6 +14,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.matchmakers.MainActivity
 import com.example.matchmakers.R
+import com.example.matchmakers.ui.createaccount.CreateAccount
 import com.google.android.material.textfield.TextInputEditText
 
 class LoginActivity : AppCompatActivity() {
@@ -58,9 +59,17 @@ class LoginActivity : AppCompatActivity() {
             if (success) {
                 // If the login was successful, save the login credentials so the user doesn't have to enter them again
                 // They can log out from the profile fragment
-                storeLogin(email, password)
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
+                loginViewModel.checkProfile({
+                    // User is registered
+                    storeLogin(email, password)
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
+                }, {
+                    // User is not registered
+                    storeLogin(email, password)
+                    startActivity(Intent(this, CreateAccount::class.java))
+                    finish()
+                })
             }
         }
 
