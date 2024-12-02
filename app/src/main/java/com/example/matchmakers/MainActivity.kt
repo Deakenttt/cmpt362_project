@@ -68,7 +68,7 @@ class  MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // update clusters (not everytime)
-        updateClusters()
+//        updateClusters()
 
         val navView: BottomNavigationView = binding.navView
 
@@ -88,21 +88,21 @@ class  MainActivity : AppCompatActivity() {
 
     }
 
-    private fun updateClusters() {
-        RetrofitInstance.api.updateClusters().enqueue(object : Callback<Void> {
-            override fun onResponse(call: Call<Void>, response: Response<Void>) {
-                if (response.isSuccessful) {
-                    Toast.makeText(this@MainActivity, "Clusters updated successfully", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this@MainActivity, "Failed to update clusters", Toast.LENGTH_SHORT).show()
-                }
-            }
-
-            override fun onFailure(call: Call<Void>, t: Throwable) {
-                Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
+//    private fun updateClusters() {
+//        RetrofitInstance.api.updateClusters().enqueue(object : Callback<Void> {
+//            override fun onResponse(call: Call<Void>, response: Response<Void>) {
+//                if (response.isSuccessful) {
+//                    Toast.makeText(this@MainActivity, "Clusters updated successfully", Toast.LENGTH_SHORT).show()
+//                } else {
+//                    Toast.makeText(this@MainActivity, "Failed to update clusters", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//
+//            override fun onFailure(call: Call<Void>, t: Throwable) {
+//                Toast.makeText(this@MainActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+//            }
+//        })
+//    }
 
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment_activity_main)

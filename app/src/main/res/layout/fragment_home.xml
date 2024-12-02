@@ -203,11 +203,12 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Repeat for Card 4 -->
-
-        <!-- Card 5 -->
-
-        <!-- Card 6 -->
+        <Button
+            android:id="@+id/post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Refresh"/>
 
     </LinearLayout>
+
 </ScrollView>
