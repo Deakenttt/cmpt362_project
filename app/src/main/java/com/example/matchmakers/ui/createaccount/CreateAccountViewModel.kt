@@ -2,22 +2,31 @@ package com.example.matchmakers.ui.createaccount
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
+import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.matchmakers.ProfileInfo
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.storage
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class CreateAccountViewModel : ViewModel() {
+class CreateAccountViewModel(
+    private val imageRotationViewModel: ImageRotationViewModel = ImageRotationViewModel()
+): ViewModel() {
 
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val db: FirebaseFirestore = FirebaseFirestore.getInstance()
@@ -39,21 +48,103 @@ class CreateAccountViewModel : ViewModel() {
     private val _galleryImage3 = MutableLiveData<Bitmap?>()
     val galleryImage3: LiveData<Bitmap?> = _galleryImage3
 
-    fun updateAvatarImage(bitmap: Bitmap) {
-        _avatarImage.value = bitmap
+
+    fun resizeBitmap(bitmap: Bitmap, targetWidth: Int, targetHeight: Int): Bitmap {
+        val aspectRatio = bitmap.width.toFloat() / bitmap.height.toFloat()
+
+        return if (bitmap.width > targetWidth || bitmap.height > targetHeight) {
+            if (bitmap.width > bitmap.height) {
+                val scaledHeight = (targetWidth / aspectRatio).toInt()
+                Bitmap.createScaledBitmap(bitmap, targetWidth, scaledHeight, true)
+            } else {
+                val scaledWidth = (targetHeight * aspectRatio).toInt()
+                Bitmap.createScaledBitmap(bitmap, scaledWidth, targetHeight, true)
+            }
+        } else {
+            bitmap // No resizing needed if within limits
+        }
     }
 
-    fun updateGalleryImage1(bitmap: Bitmap) {
-        _galleryImage1.value = bitmap
+    // Update avatar image with rotation correction
+    fun updateAvatarImage(context: Context, uri: Uri, targetWidth: Int = 800, targetHeight: Int = 800) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                val rotatedBitmap = imageRotationViewModel.rotateBitmapIfRequiredSync(context, bitmap, uri)
+                val resizedBitmap = resizeBitmap(rotatedBitmap, targetWidth, targetHeight)
+                withContext(Dispatchers.Main) {
+                    _avatarImage.value = resizedBitmap
+                }
+            } catch (e: Exception) {
+                Log.e("CreateAccountViewModel", "Error updating avatar image", e)
+            }
+        }
     }
 
-    fun updateGalleryImage2(bitmap: Bitmap) {
-        _galleryImage2.value = bitmap
+    // Update gallery image 1 with rotation correction
+    fun updateGalleryImage1(context: Context, uri: Uri, targetWidth: Int = 800, targetHeight: Int = 800) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                val rotatedBitmap = imageRotationViewModel.rotateBitmapIfRequiredSync(context, bitmap, uri)
+                val resizedBitmap = resizeBitmap(rotatedBitmap, targetWidth, targetHeight) // Example size
+                withContext(Dispatchers.Main) {
+                    _galleryImage1.value = resizedBitmap
+                }
+            } catch (e: Exception) {
+                Log.e("CreateAccountViewModel", "Error updating gallery image 1", e)
+            }
+        }
     }
 
-    fun updateGalleryImage3(bitmap: Bitmap) {
-        _galleryImage3.value = bitmap
+    // Update gallery image 2 with rotation correction
+    fun updateGalleryImage2(context: Context, uri: Uri, targetWidth: Int = 800, targetHeight: Int = 800) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                val rotatedBitmap = imageRotationViewModel.rotateBitmapIfRequiredSync(context, bitmap, uri)
+                val resizedBitmap = resizeBitmap(rotatedBitmap, targetWidth, targetHeight) // Example size
+                withContext(Dispatchers.Main) {
+                    _galleryImage2.value = resizedBitmap
+                }
+            } catch (e: Exception) {
+                Log.e("CreateAccountViewModel", "Error updating gallery image 2", e)
+            }
+        }
     }
+
+    // Update gallery image 3 with rotation correction
+    fun updateGalleryImage3(context: Context, uri: Uri, targetWidth: Int = 800, targetHeight: Int = 800) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val bitmap = MediaStore.Images.Media.getBitmap(context.contentResolver, uri)
+                val rotatedBitmap = imageRotationViewModel.rotateBitmapIfRequiredSync(context, bitmap, uri)
+                val resizedBitmap = resizeBitmap(rotatedBitmap, targetWidth, targetHeight) // Example size
+                withContext(Dispatchers.Main) {
+                    _galleryImage3.value = resizedBitmap
+                }
+            } catch (e: Exception) {
+                Log.e("CreateAccountViewModel", "Error updating gallery image 3", e)
+            }
+        }
+    }
+
+
+//    fun updateAvatarImage(bitmap: Bitmap) {
+//        _avatarImage.value = bitmap
+//    }
+//
+//    fun updateGalleryImage1(bitmap: Bitmap) {
+//        _galleryImage1.value = bitmap
+//    }
+//
+//    fun updateGalleryImage2(bitmap: Bitmap) {
+//        _galleryImage2.value = bitmap
+//    }
+//
+//    fun updateGalleryImage3(bitmap: Bitmap) {
+//        _galleryImage3.value = bitmap
+//    }
 
     fun createAccount(
         name: String,
@@ -176,6 +267,10 @@ class CreateAccountViewModel : ViewModel() {
             //Toast.makeText(context, "Image successfully uploaded", Toast.LENGTH_SHORT).show()
             callback() // Call the callback once the image is uploaded
         }
+    }
+
+    fun correctImageRotation(context: Context, bitmap: Bitmap, uri: Uri): Bitmap {
+        return imageRotationViewModel.rotateBitmapIfRequiredSync(context, bitmap, uri)
     }
 
 }

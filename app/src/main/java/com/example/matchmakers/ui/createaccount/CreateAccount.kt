@@ -1,7 +1,9 @@
 package com.example.matchmakers.ui.createaccount
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -19,6 +21,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.example.matchmakers.MainActivity
 import com.example.matchmakers.R
 import com.example.matchmakers.ui.profile.ImageUtils
@@ -284,28 +287,57 @@ class CreateAccount : AppCompatActivity() {
         galleryLauncher.launch("image/*")
     }
 
+//    private fun setImageForImageView(tag: String, uri: Uri?) {
+//        uri?.let {
+//            // Load the bitmap from the URI
+//            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, it)
+//
+//            // Correct the orientation synchronously
+//            val rotatedBitmap = viewModel.correctImageRotation(this, bitmap, uri)
+//
+//            when (tag) {
+//                "avatar_image" -> {
+//                    avatarImageView.setImageBitmap(bitmap)
+////                    viewModel.updateAvatarImage(bitmap)
+//                    viewModel.updateAvatarImage(rotatedBitmap)
+//                }
+//                "create_gallery_image_1" -> {
+//                    galleryImageView1.setImageBitmap(bitmap)
+////                    viewModel.updateGalleryImage1(bitmap)
+//                    viewModel.updateGalleryImage1(this, bitmap, uri)
+//                }
+//                "create_gallery_image_2" -> {
+//                    galleryImageView2.setImageBitmap(bitmap)
+////                    viewModel.updateGalleryImage2(bitmap)
+//                    viewModel.updateGalleryImage2(this, bitmap, uri)
+//                }
+//                "create_gallery_image_3" -> {
+//                    galleryImageView3.setImageBitmap(bitmap)
+////                    viewModel.updateGalleryImage3(bitmap)
+//                    viewModel.updateGalleryImage3(this, bitmap, uri)
+//                }
+//            }
+//        }
+//    }
+
+//  DK comment (update images to DB)
     private fun setImageForImageView(tag: String, uri: Uri?) {
         uri?.let {
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, it)
-
             when (tag) {
                 "avatar_image" -> {
-                    avatarImageView.setImageBitmap(bitmap)
-                    viewModel.updateAvatarImage(bitmap)
+                    viewModel.updateAvatarImage(this, it, targetWidth = 800, targetHeight = 800)
                 }
                 "create_gallery_image_1" -> {
-                    galleryImageView1.setImageBitmap(bitmap)
-                    viewModel.updateGalleryImage1(bitmap)
+                    viewModel.updateGalleryImage1(this, it, targetWidth = 800, targetHeight = 800)
                 }
                 "create_gallery_image_2" -> {
-                    galleryImageView2.setImageBitmap(bitmap)
-                    viewModel.updateGalleryImage2(bitmap)
+                    viewModel.updateGalleryImage2(this, it, targetWidth = 800, targetHeight = 800)
                 }
                 "create_gallery_image_3" -> {
-                    galleryImageView3.setImageBitmap(bitmap)
-                    viewModel.updateGalleryImage3(bitmap)
+                    viewModel.updateGalleryImage3(this, it, targetWidth = 800, targetHeight = 800)
                 }
             }
         }
     }
+
 }

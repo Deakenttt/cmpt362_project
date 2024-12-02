@@ -25,6 +25,9 @@
         android:theme="@style/Theme.MatchMakers"
         tools:targetApi="31">
         <activity
+            android:name=".ui.createaccount.ImageRotationViewModel"
+            android:exported="false" />
+        <activity
             android:name=".utils.FirestoreInitializer"
             android:exported="false" />
         <activity
