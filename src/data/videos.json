@@ -1,0 +1,13 @@
+[
+    {
+      "title": "Video 1",
+      "type": "youtube",
+      "url": "https://www.youtube.com/watch?v=2PVG1jqdfvM"
+    },
+    {
+        "title": "Video 2",
+        "type": "youtube",
+        "url": "https://www.youtube.com/watch?v=h-Vs2XWP1j8"
+      }
+  ]
+  

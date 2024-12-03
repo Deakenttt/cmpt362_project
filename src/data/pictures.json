@@ -1,0 +1,13 @@
+[
+    {
+      "title": "Sample Picture 1",
+      "type": "image",
+      "url": "/assets/sample-picture.jpg"
+    },
+    {
+        "title": "Sample Picture 2",
+        "type": "image",
+        "url": "/assets/sample-picture.jpg"
+      }
+  ]
+  

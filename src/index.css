@@ -1,0 +1,80 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+
+  --primary-color: #a952a5; /* Light purple */
+  --secondary-color: #dcb6dc; /* Softer purple for backgrounds */
+  --text-color: #242424; /* Dark text for contrast */
+  --light-text: #ffffff; /* Light text for buttons */
+  --hover-color: #c47ec4; /* Hover effect color */
+}
+
+body {
+  font-family: Arial, sans-serif; /* Overwrites the :root font-family */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--secondary-color); /* Light purple background */
+  color: var(--text-color); /* Text color */
+}
+
+a {
+  font-weight: 500;
+  text-decoration: none;
+  color: var(--primary-color); /* Default link color */
+  transition: color 0.2s ease-in-out;
+}
+a:hover {
+  text-decoration: underline;
+  color: var(--hover-color); /* Link hover color */
+}
+
+h1 {
+  font-size: 2.8em;
+  line-height: 1.1;
+  color: var(--primary-color); /* Header color */
+  margin-bottom: 20px;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid var(--primary-color);
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: var(--primary-color);
+  color: var(--light-text);
+  cursor: pointer;
+  transition: background-color 0.25s, border-color 0.25s;
+}
+button:hover {
+  background-color: var(--hover-color);
+  border-color: var(--hover-color);
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto var(--hover-color);
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: var(--text-color);
+    background-color: #ffffff;
+  }
+  body {
+    background-color: var(--secondary-color); /* Adjust for light mode */
+  }
+  a:hover {
+    color: var(--hover-color);
+  }
+  button {
+    background-color: var(--primary-color);
+  }
+}

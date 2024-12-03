@@ -1,0 +1,28 @@
+[
+    {
+      "title": "Sample Picture",
+      "type": "image",
+      "url": "/assets/sample-picture.jpg"
+    },
+    {
+      "title": "Sample Video",
+      "type": "video",
+      "url": "/assets/sample-video.mp4"
+    },
+    {
+      "title": "show and tell 1",
+      "type": "link",
+      "url": "https://example.com"
+    },
+    {
+        "title": "show and tell 2",
+        "type": "link",
+        "url": "https://example.com"
+    },
+    {
+        "title": "show and tell 3",
+        "type": "link",
+        "url": "https://example.com"
+    }
+  ]
+  
