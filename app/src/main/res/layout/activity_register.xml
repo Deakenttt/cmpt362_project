@@ -23,6 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/black"
+        android:textColorHint="@color/black"
         app:helperText="Enter your email">
 
         <com.google.android.material.textfield.TextInputEditText
@@ -38,6 +40,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:boxBackgroundMode="outline"
+        app:boxStrokeColor="@color/black"
+        android:textColorHint="@color/black"
         app:endIconMode="password_toggle"
         app:helperText="Create a password that is at least 6 characters long">
 
@@ -66,6 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginTop="8dp" />
+        android:layout_marginTop="8dp"
+        android:textColor="@android:color/white" />
 
 </LinearLayout>

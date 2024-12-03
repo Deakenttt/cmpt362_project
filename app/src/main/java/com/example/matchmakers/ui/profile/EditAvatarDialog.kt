@@ -36,14 +36,6 @@ class EditAvatarDialog: DialogFragment() {
             fragment?.startUseGallery()
             activity?.startUseGallery()
         }
-//        if (fragment != null){
-//            useCamera.setOnClickListener{
-//                fragment.startUseCamera()
-//            }
-//            useGallery.setOnClickListener{
-//                fragment.startUseGallery()
-//            }
-//        }
 
         builder.setView(view)
 

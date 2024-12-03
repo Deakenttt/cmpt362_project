@@ -1,18 +1,21 @@
 package com.example.matchmakers.ui.profile
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.lifecycle.ViewModelProvider
+import com.example.matchmakers.MainActivity
 import com.example.matchmakers.R
 import com.example.matchmakers.ui.report.ReportActivity
 
-class OtherProfileActivity: AppCompatActivity() {
+class OtherProfileActivity: AppCompatActivity(), DialogInterface.OnClickListener {
     private var userId = ""
     private var userName = ""
 
@@ -82,11 +85,30 @@ class OtherProfileActivity: AppCompatActivity() {
             adapter.notifyDataSetChanged()
         }
 
+        blockButton.setOnClickListener{
+            val dialog = BlockUserDialog()
+            val bundle = Bundle()
+            bundle.putString(BlockUserDialog.DIALOG_NAME, userName)
+            dialog.arguments = bundle
+            dialog.activity = this
+            dialog.show(supportFragmentManager, "Block user dialog")
+        }
         reportButton.setOnClickListener{
             val intent = Intent(this, ReportActivity::class.java)
             intent.putExtra(ReportActivity.USER_ID_KEY, userId)
             intent.putExtra(ReportActivity.USER_NAME_KEY, userName)
             startActivity(intent)
+        }
+    }
+
+    override fun onClick(dialog: DialogInterface?, which: Int) {
+        if (which == DialogInterface.BUTTON_POSITIVE){
+            profileViewModel.blockUser(userId){
+                Toast.makeText(this, "User blocked", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, MainActivity::class.java)
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                startActivity(intent)
+            }
         }
     }
 

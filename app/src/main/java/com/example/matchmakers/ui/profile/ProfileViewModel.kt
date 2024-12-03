@@ -58,11 +58,6 @@ class ProfileViewModel: ViewModel() {
             val j = it
             val bitmap = BitmapFactory.decodeByteArray(j, 0, j.size)
             callback(bitmap)
-//            if (currentUser){
-//                avatar.value = bitmap
-//            } else{
-//                otherAvatar.value = bitmap
-//            }
         }
         task.addOnFailureListener{
             println("failed to load, user probably doesn't have an avatar")
@@ -118,12 +113,6 @@ class ProfileViewModel: ViewModel() {
         val user = auth.currentUser ?: return
         val profile = currentProfile.value ?: return
 
-//        val path = galleryImagePath(user.uid, profile.image1)
-//        if (path == "") return
-//
-//        downloadBytes(path) {bitmap ->
-//            galleryImage1.value = bitmap
-//        }
         var loaded = 0
         var required = 0
 
@@ -149,7 +138,6 @@ class ProfileViewModel: ViewModel() {
                 }
             }
         }
-        //gallery.value = bitmaps
     }
 
     fun replaceGalleryImage(context: Context, bitmap: Bitmap, index: Int){
@@ -179,36 +167,6 @@ class ProfileViewModel: ViewModel() {
                 gallery.value = bitmaps!!
             }
         }
-
-
-        /*
-        // 1 image only
-        var fileName = ""
-        var updateBitmap: MutableLiveData<Bitmap>? = null
-
-        when(index){
-            0 -> {
-                if (profile.image1 == ""){
-                    profile.image1 = "image_${System.currentTimeMillis()}.jpg"
-                    currentProfile.value?.image1 = profile.image1
-                }
-                fileName = profile.image1
-                updateBitmap = galleryImage1
-            }
-        }
-
-//        if (profile.image1 == ""){
-//            profile.image1 = "image_${System.currentTimeMillis()}.jpg"
-//            currentProfile.value?.image1 = profile.image1
-//        }
-
-        val path = galleryImagePath(user.uid, fileName)
-        if (path == "" || updateBitmap == null) return
-
-        println("PATH $path")
-        uploadImage(context, bitmap, path){
-            downloadBytes(path) {bitmap -> updateBitmap.value = bitmap}
-        }*/
     }
 
     fun addGalleryImage(context: Context, bitmap: Bitmap){
@@ -334,12 +292,62 @@ class ProfileViewModel: ViewModel() {
         }.addOnFailureListener{ error ->
             println("Could not update profile: $error")
         }
+    }
 
-//        db.collection("users").document(user.uid).update("timestamp", timestamp).addOnSuccessListener {
-//            println("updated timestamp")
-//        }.addOnFailureListener{ error->
-//            println("Could not update timestamp: $error")
-//        }
+    fun blockUser(uidToBlock: String, callback: () -> Unit){
+        val user = auth.currentUser ?: return
+
+        println("${user.uid} is blocking $uidToBlock")
+
+        val document = db.collection("profileinfo").document(user.uid)
+
+        document.get().addOnSuccessListener{
+            val dislikeList = it.get("DislikeList") as MutableList<String>
+            if (dislikeList == null) return@addOnSuccessListener
+
+            if (!dislikeList.contains(uidToBlock)){
+                dislikeList.add(uidToBlock)
+            }
+
+            val profileMap: HashMap<String, Any> = hashMapOf("DislikeList" to dislikeList.toList())
+
+            var completed = 0
+
+            // Add blocked user to the dislike list of the current user
+            db.collection("profileinfo").document(user.uid).update(profileMap).addOnSuccessListener {
+                completed++
+                if (completed == 2) callback()
+            }.addOnFailureListener{ error ->
+                println("Could not block user: $error")
+            }
+
+            // Remove the conversation
+            db.collection("conversations").whereArrayContains("participants", user.uid).addSnapshotListener{documents, _ ->
+                if (documents == null) return@addSnapshotListener
+                var conversationId = ""
+
+                for (document in documents){
+                    val participants = document.get("participants") as List<String>
+                    if (participants != null){
+                        // Out of all conversations the current user is a part of, delete the one that the blocked user is also a part of
+                        if (participants.contains(uidToBlock)){
+                            conversationId = document.id
+                        }
+                    }
+                }
+
+                if (conversationId != ""){
+                    db.collection("conversations").document(conversationId).delete().addOnSuccessListener{
+                        completed++
+                        if (completed == 2) callback()
+                    }.addOnFailureListener{ error ->
+                        println("Could not delete document: $conversationId")
+                    }
+                }
+            }
+        }.addOnFailureListener{ error ->
+            println("Could not block user: $error")
+        }
     }
 
     companion object{
