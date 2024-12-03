@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
+    android:background="@drawable/background_1"
     tools:context=".ui.createaccount.CreateAccount">
 
     <LinearLayout
@@ -17,6 +18,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/black"
+            android:textColorHint="@color/black"
             app:hintTextAppearance="@style/TextAppearance.MaterialComponents.Headline6">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -31,6 +34,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/black"
+            android:textColorHint="@color/black"
             app:hintTextAppearance="@style/TextAppearance.MaterialComponents.Headline6">
 
             <com.google.android.material.textfield.TextInputEditText
@@ -46,6 +51,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/black"
+            android:textColorHint="@color/black"
             app:hintTextAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_marginTop="16dp">
 
@@ -73,6 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:minHeight="48dp"
+            android:popupBackground="#808080"
             android:spinnerMode="dropdown" />
 
         <Spinner
@@ -81,6 +89,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:minHeight="48dp"
+            android:popupBackground="#808080"
             android:spinnerMode="dropdown" />
 
         <Spinner
@@ -89,6 +98,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:minHeight="48dp"
+            android:popupBackground="#808080"
             android:spinnerMode="dropdown" />
 
         <!-- Gender Section -->
@@ -112,6 +122,7 @@
                 android:id="@+id/gender_male"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/gender_male" />
 
             <!-- Spacer for distance -->
@@ -123,6 +134,7 @@
                 android:id="@+id/gender_female"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@color/black"
                 android:text="@string/gender_female" />
         </RadioGroup>
 

@@ -39,7 +39,6 @@ class MessagesFragment: Fragment() {
 
         messagesViewModel.fetchMatches()
 
-
         messagesViewModel.conversationIds.observe(viewLifecycleOwner, Observer { conversationIds ->
             if (conversationIds.isNotEmpty()) {
                 messagesViewModel.usersList.observe(viewLifecycleOwner, Observer { userList ->

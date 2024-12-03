@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_3">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,24 +16,25 @@
             android:textStyle="bold"
             android:layout_marginBottom="12dp"
             android:textColor="?attr/colorPrimary"
-            android:text="Your Interests"/>
+            android:text="@string/interests_title"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Select up to 3 different interests."/>
+            android:text="@string/interests_description_1"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tap on an interest from the list to remove it."/>
+            android:text="@string/interests_description_2"/>
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add new interests from the menu below"/>
+            android:text="@string/interests_description_3"/>
 
         <Spinner
             android:id="@+id/edit_interests_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:popupBackground="#808080"
             android:minHeight="48dp" />
 
         <ListView
@@ -61,13 +63,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Save Interests"/>
+            android:text="@string/interests_save"/>
         <Button
             android:id="@+id/edit_interests_discard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Discard Changes"/>
+            android:text="@string/interests_cancel"/>
     </LinearLayout>
 
 </RelativeLayout>

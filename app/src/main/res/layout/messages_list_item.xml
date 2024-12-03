@@ -14,8 +14,7 @@
             android:id="@+id/messages_username"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="20dp"
-            android:text="Username"/>
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/messages_age"
@@ -23,8 +22,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
             android:layout_gravity="center"
-            android:textColor="#808080"
-            android:text="Age"/>
+            android:textColor="#808080" />
 
 
     </LinearLayout>
@@ -33,7 +31,6 @@
         android:id="@+id/messages_lastMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:text="Last message"/>
+        android:layout_marginTop="4dp" />
 
 </LinearLayout>

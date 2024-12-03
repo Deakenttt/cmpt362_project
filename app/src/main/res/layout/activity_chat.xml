@@ -1,9 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white">
+    android:background="@drawable/background_4">
 
     <!-- Toolbar -->
     <androidx.appcompat.widget.Toolbar
@@ -32,7 +31,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Username"
             android:textSize="20sp"
             android:textStyle="bold"
             android:padding="4dp"
@@ -43,7 +41,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:text="Age"
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
             android:padding="4dp" />
@@ -53,7 +50,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:text="View Profile"
+            android:text="@string/chat_view_profile"
             app:cornerRadius="8dp"
             app:icon="@drawable/ic_profile"
             app:iconGravity="textStart"
@@ -86,7 +83,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@drawable/rounded_edittext_background"
-            android:hint="Type a message..."
+            android:hint="@string/chat_input"
             android:minHeight="48dp"
             android:padding="12dp" />
 
