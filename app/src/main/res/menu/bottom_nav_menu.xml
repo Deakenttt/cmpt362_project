@@ -11,10 +11,10 @@
         android:icon="@drawable/round_location_on_24"
         android:title="@string/title_map" />
 
-    <item
-        android:id="@+id/navigation_notifications"
-        android:icon="@drawable/round_add_reaction_24"
-        android:title="@string/title_notifications" />
+<!--    <item-->
+<!--        android:id="@+id/navigation_notifications"-->
+<!--        android:icon="@drawable/round_add_reaction_24"-->
+<!--        android:title="@string/title_notifications" />-->
 
     <item
         android:id="@+id/navigation_messages"
