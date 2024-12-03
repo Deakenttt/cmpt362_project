@@ -10,32 +10,36 @@ MatchMakers is an app for users looking to make connections with like-minded peo
 
 
 ## Table of Contents
-1. [Threads Diagram](#threads)
+1. [Special Instructions](#instructions)
 
-2. [Special Instructions](#instructions)
+2. [Demo](#Demo)
 
-3. [Guidance](#guide)
+3. [Threads Diagram](#threads)
 
-
-<a name="threads"></a>
-## 1. Threads Diagram
-![Threads Diagram](ThreadsDiagram.jpg)
+4. [Guidance](#guide)
 
 
 <a name="instructions"></a>
-## 2. Special Instructions
-To test matching: 
+## 1. Special Instructions
+To test matching:
 Email: cmpt362_marking@email.com Pass: 123456
 This account has been marked as "liked" by every user in our database, allowing for testing of the matching and inbox creation.
 
-To test messaging: 
+To test messaging:
 Email: testhome4324@gmail.com Pass: 123456
 Email: testercreate123@gmail.com Pass: 123456
 These two users share an inbox between eachother to test real-time chat.
 
+<a name="demo"></a>
+## 2. Demo
+![Demo](Demo.jpg)
+
+<a name="threads"></a>
+## 3. Threads Diagram
+![Threads Diagram](ThreadsDiagram.jpg)
 
 <a name="guide"></a>
-## 3. Guidance
+## 4. Guidance
 
 - Use [Github](https://)
 - Use [Android Studio](https://developer.android.com/studio?gad_source=1&gclid=CjwKCAiA0rW6BhAcEiwAQH28In7LMm4q69rR5m_n4rEX8QFKPQq8o0bS8W_h1UhVGPK1rZM1ZUfzExoCAZoQAvD_BwE&gclsrc=aw.ds)
