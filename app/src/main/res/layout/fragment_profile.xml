@@ -18,7 +18,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Avatar"
+            android:text="@string/avatar_description"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary"
@@ -41,7 +41,7 @@
                 android:id="@+id/edit_avatar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit Avatar"
+                android:text="@string/profile_edit_avatar"
                 app:cornerRadius="16dp"
                 app:icon="@drawable/ic_camera"
                 app:iconGravity="textStart"
@@ -53,7 +53,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Name"
+            android:text="@string/name_description"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary"
@@ -63,6 +63,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/black"
             app:boxCornerRadiusTopStart="12dp"
             app:boxCornerRadiusBottomEnd="12dp">
 
@@ -70,7 +71,7 @@
                 android:id="@+id/profile_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your name"
+                android:hint="@string/profile_name_hint"
                 android:padding="12dp" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -80,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Age"
+            android:text="@string/age_input"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary" />
@@ -89,6 +90,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/black"
             app:boxCornerRadiusTopStart="12dp"
             app:boxCornerRadiusBottomEnd="12dp">
 
@@ -96,7 +98,7 @@
                 android:id="@+id/profile_age"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter your age"
+                android:hint="@string/profile_age_hint"
                 android:inputType="number"
                 android:padding="12dp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -107,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Biography"
+            android:text="@string/biography_description"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary" />
@@ -116,6 +118,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:boxBackgroundMode="outline"
+            app:boxStrokeColor="@color/black"
             app:boxCornerRadiusTopStart="12dp"
             app:boxCornerRadiusBottomEnd="12dp">
 
@@ -123,7 +126,7 @@
                 android:id="@+id/profile_biography"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Tell us about yourself"
+                android:hint="@string/profile_biography_hint"
                 android:gravity="top"
                 android:lines="4"
                 android:inputType="textMultiLine"
@@ -136,7 +139,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="8dp"
-            android:text="Interests"
+            android:text="@string/interests_description"
             android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="?attr/colorPrimary" />
@@ -170,7 +173,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Edit Interests"
+                    android:text="@string/profile_edit_interests"
                     app:cornerRadius="16dp"
                     app:icon="@drawable/ic_edit"
                     app:iconGravity="textStart"
@@ -182,7 +185,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Open Gallery"
+                    android:text="@string/profile_edit_gallery"
                     app:cornerRadius="16dp"
                     app:icon="@drawable/ic_gallery"
                     app:iconGravity="textStart"
@@ -203,7 +206,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Save Profile"
+                    android:text="@string/profile_save"
                     app:cornerRadius="16dp"
                     app:icon="@drawable/ic_save"
                     app:iconGravity="textStart"
@@ -215,7 +218,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Log Out"
+                    android:text="@string/log_out"
                     app:cornerRadius="16dp"
                     app:icon="@drawable/ic_logout"
                     app:iconGravity="textStart"

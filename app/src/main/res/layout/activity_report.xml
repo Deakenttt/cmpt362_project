@@ -34,7 +34,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:layout_marginBottom="12dp"
-                android:text="Select a reason for your report" />
+                android:text="@string/report_title" />
 
             <!-- RadioGroup for Reasons -->
 
@@ -49,31 +49,35 @@
                     android:id="@+id/report_reason_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reason 1" />
+                    android:textColor="@color/black"
+                    android:text="@string/report_reason_1" />
 
                 <RadioButton
                     android:id="@+id/report_reason_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reason 2" />
+                    android:textColor="@color/black"
+                    android:text="@string/report_reason_2" />
 
                 <RadioButton
                     android:id="@+id/report_reason_3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Reason 3" />
+                    android:textColor="@color/black"
+                    android:text="@string/report_reason_3" />
 
                 <RadioButton
                     android:id="@+id/report_reason_other"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Other" />
+                    android:textColor="@color/black"
+                    android:text="@string/report_reason_other" />
             </RadioGroup>
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Additional information (optional)"
+                android:text="@string/report_input"
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
 
@@ -81,13 +85,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:boxBackgroundMode="outline"
-                android:hint="Additional information (optional)">
+                app:boxStrokeColor="@color/black"
+                android:hint="@string/report_input">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/report_other_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Add additional information here"
                     android:inputType="textMultiLine"
                     android:lines="5"
                     tools:ignore="SpeakableTextPresentCheck" />
@@ -100,7 +104,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="24dp"
-                android:text="Submit Report"
+                android:text="@string/report_submit"
                 android:textAllCaps="false"
                 android:textSize="16sp"
                 app:cornerRadius="16dp"
