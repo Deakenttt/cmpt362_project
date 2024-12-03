@@ -53,20 +53,37 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
                         if (likeList != null && loggedInUserUid in likeList) {
                             _mutualLikeStatus.value = true
 
-                            val participants = listOf(loggedInUserUid, currentUser.id)
-                            val messages = mutableListOf<Map<String, Any>>()
+                            val participants = listOf(loggedInUserUid, currentUser.id).sorted()
+                            db.collection("conversations")
+                                .whereArrayContains("participants", participants[0])
+                                .get()
+                                .addOnSuccessListener { querySnapshot ->
+                                    val existingConversation = querySnapshot.documents.find { doc ->
+                                        val conversationParticipants = doc.get("participants") as? List<String>
+                                        conversationParticipants?.sorted() == participants
+                                    }
 
-                            val conversationData = hashMapOf(
-                                "participants" to participants,
-                                "messages" to messages
-                            )
+                                    if (existingConversation == null) {
+                                        val messages = mutableListOf<Map<String, String>>()
 
-                            db.collection("conversations").add(conversationData)
-                                .addOnSuccessListener {
-                                    _errorMessage.value = null
+                                        val conversationData = hashMapOf(
+                                            "participants" to participants,
+                                            "messages" to messages
+                                        )
+
+                                        db.collection("conversations").add(conversationData)
+                                            .addOnSuccessListener {
+                                                _errorMessage.value = null
+                                            }
+                                            .addOnFailureListener { e ->
+                                                _errorMessage.value = "Failed to create conversation: ${e.localizedMessage}"
+                                            }
+                                    } else {
+                                        _errorMessage.value = "Conversation already exists."
+                                    }
                                 }
                                 .addOnFailureListener { e ->
-                                    _errorMessage.value = "Failed to create conversation: ${e.localizedMessage}"
+                                    _errorMessage.value = "Failed to check existing conversations: ${e.localizedMessage}"
                                 }
                         } else {
                             _mutualLikeStatus.value = false
@@ -82,6 +99,7 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
             }
         }
     }
+
 
     /**
      * Handles the "dislike" action for the current user.
