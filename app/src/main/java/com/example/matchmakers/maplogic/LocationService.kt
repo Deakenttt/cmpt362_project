@@ -119,6 +119,29 @@ class LocationService(private val context: Context) {
             }
     }
 
+    @SuppressLint("MissingPermission")
+    fun startLocationUpdates(intervalMillis: Long = 10000) {
+        val locationRequest = LocationRequest.create().apply {
+            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+            interval = intervalMillis
+        }
+
+        val locationCallback = object : LocationCallback() {
+            override fun onLocationResult(locationResult: LocationResult) {
+                val location = locationResult.lastLocation
+                if (location != null) {
+                    saveLocationToFirestore(location.latitude, location.longitude)
+                }
+            }
+        }
+
+        fusedLocationClient.requestLocationUpdates(
+            locationRequest,
+            locationCallback,
+            Looper.getMainLooper()
+        )
+    }
+
 
 
 }

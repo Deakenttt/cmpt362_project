@@ -37,6 +37,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         backButton.setOnClickListener {
             finish()
         }
+        locationService.startLocationUpdates()
     }
 
     private fun initializeMap() {
@@ -72,7 +73,8 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         // Create a map to hold the location data
         val locationData = mapOf(
             "latitude" to latitude,
-            "longitude" to longitude
+            "longitude" to longitude,
+            "timestamp" to System.currentTimeMillis()
         )
 
         // Store location data
@@ -103,29 +105,30 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                         val longitude = document.getDouble("longitude")
 
                         if (latitude != null && longitude != null) {
-                            val userLocation = LatLng(latitude, longitude)
-                            println("User: $name, Latitude: $latitude, Longitude: $longitude")
                             UserInfo(name, interest, gender, latitude, longitude)
                         } else {
                             null
                         }
                     }
 
-                    googleMap.clear() // Clear existing markers
-                    // Adding user markers to the map
+                    googleMap.clear()
+
                     users.forEach { user ->
-                        googleMap.addMarker(mapDataHandler.createMarkerOptions(
-                            LatLng(user.latitude, user.longitude),
-                            user.name
-                        ))
+                        googleMap.addMarker(
+                            mapDataHandler.createMarkerOptions(
+                                LatLng(user.latitude, user.longitude),
+                                user.name
+                            )
+                        )
                     }
                 } else {
-                    Toast.makeText(this, "Failed to load user locations", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this, "No user locations found", Toast.LENGTH_SHORT).show()
                 }
             }
     }
 
-    // Determine if the user is nearby, defined as within a radius of 5 kilometer
+
+    // Determine if the user is nearby
     private fun isNearby(currentUserLocation: LatLng, otherUserLocation: LatLng): Boolean {
         val results = FloatArray(1)
         android.location.Location.distanceBetween(
@@ -133,7 +136,7 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             otherUserLocation.latitude, otherUserLocation.longitude,
             results
         )
-        return results[0] < 5000 // Within 5 kilometer
+        return results[0] < 20000
     }
 
     override fun onDestroy() {
