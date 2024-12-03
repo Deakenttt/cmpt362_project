@@ -98,7 +98,7 @@ class ChatActivity: AppCompatActivity() {
 
             chatList.post{
                 // Scroll to the bottom each time a new message is posted
-                chatList.scrollListBy(2147483647)
+                chatList.setSelection(adapter.count - 1)
             }
         })
 

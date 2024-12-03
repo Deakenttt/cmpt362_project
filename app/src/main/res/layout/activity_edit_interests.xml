@@ -34,6 +34,7 @@
             android:id="@+id/edit_interests_options"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:popupBackground="#808080"
             android:minHeight="48dp" />
 
         <ListView
