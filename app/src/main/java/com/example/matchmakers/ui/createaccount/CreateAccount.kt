@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide
 import com.example.matchmakers.MainActivity
 import com.example.matchmakers.R
 import com.example.matchmakers.network.ClusterApiService
+import com.example.matchmakers.ui.home.HomeFragment
 import com.example.matchmakers.ui.profile.ImageUtils
 import com.google.android.material.textfield.TextInputEditText
 import retrofit2.Call
@@ -230,8 +231,6 @@ class CreateAccount : AppCompatActivity() {
         viewModel.accountCreated.observe(this, Observer { isCreated ->
             if (isCreated) {
                 sendPostRequest()
-                startActivity(Intent(this, MainActivity::class.java))
-                finish()
             } else {
                 // Implement more robust error handling later
                 println("mgs: Error adding user info or user not logged in")
@@ -365,6 +364,8 @@ class CreateAccount : AppCompatActivity() {
             override fun onResponse(call: Call<Void>, response: Response<Void>) {
                 if (response.isSuccessful) {
                     println("mgs: POST successful")
+                    startActivity(Intent(this@CreateAccount, MainActivity::class.java))
+                    finish()
                 } else {
                     println("mgs: POST failed with code: ${response.code()} - ${response.message()} - ${response.body()}")
                 }
