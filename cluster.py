@@ -178,7 +178,7 @@ def full_reclustering():
 
 #     return recommendations
 
-def recommend_clusters(male_clusters, female_clusters, male_data, female_data, distance_threshold=1.5):
+def recommend_clusters(male_clusters, female_clusters, male_data, female_data, distance_threshold=0.35):
     # Compute centroids for male and female clusters
     male_centroids = compute_centroids(male_clusters, male_data)
     female_centroids = compute_centroids(female_clusters, female_data)
@@ -218,7 +218,7 @@ def recommend_clusters(male_clusters, female_clusters, male_data, female_data, d
 
 # Main function to perform clustering and recommend clusters
 def main():
-    male_clusters, female_clusters, male_data, female_data = cluster_users(eps=0.6, min_samples=1)
+    male_clusters, female_clusters, male_data, female_data = cluster_users(eps=0.9, min_samples=1)
     
     # Display initial clusters
     print("Male Clusters:", male_clusters)

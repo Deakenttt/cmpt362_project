@@ -5,6 +5,10 @@ from data import fetch_user_data, db  # Import db directly from data.py
 
 app = Flask(__name__)
 
+@app.route("/")
+def index():
+    return "MM recommand sys "
+
 # Endpoint to run clustering and update clusters and recommendations in Firebase
 @app.route("/update_clusters", methods=["POST"])
 def update_clusters():
@@ -86,4 +90,4 @@ def save_clusters_and_recommendations(male_clusters, female_clusters, recommenda
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app.run(host="0.0.0.0", port=8080)
