@@ -22,6 +22,9 @@ MatchMakers is an app for users looking to make connections with like-minded peo
 
 <a name="instructions"></a>
 ## 1. Special Instructions
+
+If you don't see any recommended users after a new account is created, don't panic, reopen the App, and the recommended system will run again to try to find more users for you. 🙂
+
 To test matching:
 Email: cmpt362_marking@email.com Pass: 123456
 This account has been marked as "liked" by every user in our database, allowing for testing of the matching and inbox creation.
