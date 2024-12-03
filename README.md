@@ -29,7 +29,7 @@ Email: cmpt362_marking@email.com Pass: 123456
 This account has been marked as "liked" by every user in our database, allowing for testing of the matching and inbox creation.
 
 To test messaging: 
-Email: testhome4234@gmail.com Pass: 123456
+Email: testhome4324@gmail.com Pass: 123456
 Email: testercreate123@gmail.com Pass: 123456
 These two users share an inbox between eachother to test real-time chat.
 
