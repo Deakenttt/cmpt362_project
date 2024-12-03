@@ -19,6 +19,8 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
     // Exposing the currently displayed user from UserViewModel
     val currentRecommendedUser: LiveData<User?> get() = userViewModel.currentUser
 
+    val recommendedUserList: LiveData<List<User>> get() = userViewModel.recommendedUsers
+
     // Holds error messages for the UI
     private val _errorMessage = MutableLiveData<String?>()
     val errorMessage: LiveData<String?> get() = _errorMessage
@@ -40,6 +42,11 @@ class HomeViewModel(private val userViewModel: UserViewModel) : ViewModel() {
 
         if (currentUser == null || loggedInUserUid == null) {
             _errorMessage.value = "No user to like or user not logged in."
+            return
+        }
+
+        if(recommendedUserList.value.isNullOrEmpty()){
+            _errorMessage.value = "mgs: Sorry, no more users available."
             return
         }
 

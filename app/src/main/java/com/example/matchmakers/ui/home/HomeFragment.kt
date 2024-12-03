@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.matchmakers.R
 import com.example.matchmakers.databinding.FragmentHomeBinding
 import com.example.matchmakers.repository.LocalUserRepository
 import com.example.matchmakers.viewmodel.UserViewModel
@@ -41,6 +42,7 @@ class HomeFragment : Fragment() {
     private var storage = Firebase.storage
     private var ref = storage.reference
 
+    var nullCheck: Boolean = false
 
 
     override fun onCreateView(
@@ -49,8 +51,6 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
-
 
         initialize()
         return binding.root
@@ -87,11 +87,11 @@ class HomeFragment : Fragment() {
 
     private fun setupObservers() {
         // Observe the current recommended user and update the UI
-        homeViewModel.currentRecommendedUser.observe(viewLifecycleOwner) { user ->
+        userViewModel.currentUser.observe(viewLifecycleOwner) { user ->
             if (user != null) {
                 displayUserOnCards(user)
             } else {
-                showNoMoreUsersMessage()
+                nullCheck = true
             }
         }
 
@@ -107,11 +107,24 @@ class HomeFragment : Fragment() {
                 Toast.makeText(requireContext(), "Congrats, you matched! Messages inbox now open!", Toast.LENGTH_LONG).show()
             }
         }
+
+        userViewModel.recommendedUsers.observe(viewLifecycleOwner) { recommendedUsers ->
+            if (recommendedUsers.isNullOrEmpty()) {
+                showNoMoreUsersMessage()
+            } else {
+                // Handle logic when there are recommended users
+                println("mgs: Recommended users available: ${recommendedUsers.size}")
+            }
+        }
+
     }
 
     private fun setupButtons() {
         // Handle like and dislike button clicks
-        binding.likeButton1.setOnClickListener { homeViewModel.likeUser() }
+        binding.likeButton1.setOnClickListener {
+            homeViewModel.likeUser()
+
+        }
         binding.dislikeButton1.setOnClickListener { homeViewModel.dislikeUser() }
 
     }
@@ -122,6 +135,10 @@ class HomeFragment : Fragment() {
     private fun displayUserOnCards(user: User) {
         // Example: Assuming the User model has a `pictures` field containing 6 image resource IDs
 //        val pictures = user.pictures // List of image resource IDs (Int)
+
+        if(nullCheck){
+            return
+        }
 
         val displayedUserUid = user.id
         db.collection("profileinfo").document(displayedUserUid).get()
@@ -182,7 +199,18 @@ class HomeFragment : Fragment() {
      * Show a message when no recommended users are available.
      */
     private fun showNoMoreUsersMessage() {
-        // Add some sort of popup to inform user that no more users are available currently
+        binding.username.text = "Sorry, no more users available."
+        binding.userAge.text = ""
+        binding.userBio.text = ""
+        binding.userInterests.text = ""
+
+        // Reset images to a placeholder or empty drawable
+        binding.userImage.setImageResource(R.drawable.placeholder_image)
+        binding.userImage1.setImageResource(R.drawable.placeholder_image)
+        binding.userImage2.setImageResource(R.drawable.placeholder_image)
+        binding.userImage3.setImageResource(R.drawable.placeholder_image)
+
+        Toast.makeText(requireContext(), "No more users available. Please check back later!", Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {
