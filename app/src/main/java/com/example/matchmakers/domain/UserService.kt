@@ -123,10 +123,25 @@ class UserService(
             return
         }
 
+        val loggedInUserId = remoteUserRepository.getCurrentUserId()
+        if (loggedInUserId == null) {
+            Log.e(TAG, "Logged-in user ID is null. Cannot filter out the logged-in user.")
+            return
+        }
+
+        // Filter out the logged-in user
+        val filteredUsers = users.filter { it.id != loggedInUserId }
+        Log.d(TAG, "Updating cache with ${filteredUsers.size} users after filtering out the logged-in user.")
+
+        if (filteredUsers.isEmpty()) {
+            Log.d(TAG, "No users to update after filtering. Cache update skipped.")
+            return
+        }
+
         Log.d(TAG, "Updating cache with ${users.size} users.")
 
         // Call the updated `updateCache` method with the onUpdateComplete callback
-        localUserRepository.updateCache(users, currentTime, onUpdateComplete = {
+        localUserRepository.updateCache(filteredUsers, currentTime, onUpdateComplete = {
             Log.d(TAG, "Cache update callback invoked. Post-update actions can proceed.")
 //            logCacheData() // Log the current cache state for debugging
         })
