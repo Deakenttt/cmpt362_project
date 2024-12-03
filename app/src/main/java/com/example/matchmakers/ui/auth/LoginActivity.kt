@@ -50,10 +50,7 @@ class LoginActivity : AppCompatActivity() {
 
             ActivityCompat.requestPermissions(this, permissions, REQUEST_LOCATION_PERMISSION)
 
-        } else {
-            Toast.makeText(this, "MatchMakers needs location permissions", Toast.LENGTH_SHORT).show()
         }
-
         // Observe login result
         loginViewModel.loginResult.observe(this) { success ->
             if (success) {

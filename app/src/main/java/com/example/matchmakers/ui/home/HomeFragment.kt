@@ -210,7 +210,6 @@ class HomeFragment : Fragment() {
         binding.userImage2.setImageResource(R.drawable.placeholder_image)
         binding.userImage3.setImageResource(R.drawable.placeholder_image)
 
-        Toast.makeText(requireContext(), "No more users available. Please check back later!", Toast.LENGTH_LONG).show()
     }
 
     override fun onDestroyView() {
