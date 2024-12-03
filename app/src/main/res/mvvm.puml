@@ -1,0 +1,157 @@
+@startuml
+scale 0.8
+package "com.example.matchmakers" {
+
+    package adapter {
+        class RecommendedUserCache
+    }
+    package di{
+        class appModule
+        class DatabaseModule
+    }
+
+    package domain{
+        class UserService
+        }
+
+    package adapter {
+                class RecommendedUserCache
+    }
+
+    package maplogic {
+        class LocationPermissionHandler
+        class MapDataHandler
+        class LocationService
+    }
+
+    package match {
+        class MatchListFragment
+        class MatchListAdapter
+    }
+
+    package database {
+        class UserDao
+        class UserDatabase
+    }
+
+    package model {
+        class User
+        class ChatMessage
+    }
+
+    package network {
+        class ClusterApiService
+        class RetrofitInstance
+    }
+
+    package repository {
+        class LocalUserRepository
+        class RemoteUserRepository
+    }
+
+    package ui {
+        package auth {
+            class LoginActivity
+            class LoginViewModel
+            class RegisterActivity
+            class RegisterViewModel
+        }
+
+        package CreateAccount {
+            class CreateAccount
+            class CreateAccountViewModel
+            class ImageRotationViewModel
+        }
+
+        package dashboard {
+            class DashboardFragment
+            class DashboardViewModel
+        }
+
+        package home {
+            class HomeFragment
+            class HomeViewModel
+            class HomeViewModelFactory
+        }
+
+        package messages {
+            class ChatActivity
+            class ChatAdapter
+            class ChatViewModel
+            class MessagesAdapter
+            class MessagesFragment
+            class MessagesViewModel
+            class MessagesUser
+        }
+
+        package notifications {
+            class NotificationsFragment
+            class NotificationsViewModel
+        }
+
+        package profile {
+            class EditAvatarDialog
+            class ProfileFragment
+            class ProfileViewModel
+            class OtherProfileActivity
+            class ImageUtils
+            class InterestsAdapter
+            class EditInterestsActivity
+            class GalleryActivity
+        }
+
+        package mapview {
+            class MapFragment
+            class MapViewModel
+            class MapActivity
+        }
+
+        package report {
+            class ReportActivity
+        }
+    }
+
+    package viewmodel {
+        class UserViewModel
+        class UserViewModelFactory
+    }
+
+    package worker {
+            class UserSyncWorker
+        }
+
+
+    class MainActivity
+    class MatchmakerApplication
+
+
+
+    ' Add relationships and dependencies here as needed
+
+    UserRepository --> User
+    UserRepository --> UserDao
+    LoginActivity --> MainActivity
+    RegisterActivity --> CreateAccount
+    CreateAccount --> MainActivity
+    DashboardFragment --> LocationPermissionHelper
+    MapActivity --> LocationService
+    MapActivity --> UserInfo
+    MapActivity --> MapDataHandler
+    MapFragment --> LocationService
+    ChatActivity --> ChatMessage
+    ChatActivity --> OtherProfileActivity
+    ChatAdapter --> ChatMessage
+    MessagesAdapter --> User
+    MessagesFragment --> User
+    OtherProfileActivity --> ReportActivity
+    ProfileFragment --> LoginActivity
+    UserViewModel --> User
+    UserViewModel --> UserRepository
+    MainActivity --> RetrofitInstance
+    MainActivity --> LocationPermissionHelper
+    MainActivity --> LocationService
+
+
+}
+
+@enduml
