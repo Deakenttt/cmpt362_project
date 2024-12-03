@@ -12,8 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
-        <!-- Set application background -->
-        <item name="android:windowBackground">@drawable/app_background</item>
     </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.MatchMakers" parent="Theme.Material3.DayNight.NoActionBar">

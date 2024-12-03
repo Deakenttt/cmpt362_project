@@ -2,7 +2,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_5">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -36,6 +37,8 @@
                 android:text="Select a reason for your report" />
 
             <!-- RadioGroup for Reasons -->
+
+            <!-- Additional Information -->
             <RadioGroup
                 android:id="@+id/report_reason_input"
                 android:layout_width="match_parent"
@@ -67,7 +70,6 @@
                     android:text="Other" />
             </RadioGroup>
 
-            <!-- Additional Information -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
