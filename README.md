@@ -1,6 +1,7 @@
 # CMPT 362 Group 23 - MatchMakers App
 
-Source code located in master branch
+Source code for the App located in master branch
+Machine-learning recommendation system located in ML branch
 
 MatchMakers is an app for users looking to make connections with like-minded people. Through matchmakers, users are able to connect with others who share similar interests, goals, or values. Whether you're looking for friends, collaborators, or something more, MatchMakers provides a platform tailored to fostering meaningful relationships.Through personalized matching algorithms and a focus on shared passions, the app ensures users are introduced to people who truly resonate with their interests.
 ## Important Links
