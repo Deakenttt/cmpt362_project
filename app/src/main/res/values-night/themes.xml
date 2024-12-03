@@ -12,6 +12,12 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <!-- Force all text colors to be black -->
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorSecondary">@color/black</item>
+        <item name="android:textColorHint">@color/black</item>
+        <item name="android:textColorLink">@color/black</item>
     </style>
     <!-- Base application theme. -->
     <style name="Base.Theme.MatchMakers" parent="Theme.Material3.DayNight.NoActionBar">
